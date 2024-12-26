@@ -10,7 +10,7 @@ services:
     environment:
       - ETCD_ENABLE_V2=true
       - ALLOW_NONE_AUTHENTICATION=yes
-      - ETCD_ADVERTISE_CLIENT_URLS=http://192.168.117.24:3379
+      - ETCD_ADVERTISE_CLIENT_URLS=http://192.168.65.8:3379
       - ETCD_LISTEN_CLIENT_URLS=http://0.0.0.0:2379
       - ETCD_NAME=etcd
     volumes:
@@ -35,7 +35,7 @@ services:
     command: redis-server --requirepass easy-chat --appendonly yes
 
   mysql:
-    image: mysql:5.7
+    image: mysql:8.0
     ports:
       - 13306:3306
     container_name: mysql

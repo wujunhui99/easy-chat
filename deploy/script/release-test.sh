@@ -1,3 +1,4 @@
+#!/bin/bash  
 need_start_server_shell=(
   # rpc
   user-rpc-test.sh

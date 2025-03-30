@@ -5,8 +5,8 @@ services:
     image: bitnami/etcd:latest
     container_name: etcd
     ports:
-      - "3379:2379"
-      - "3380:2380"
+      - "2379:2379"
+      - "2380:2380"
     environment:
       - ETCD_ENABLE_V2=true
       - ALLOW_NONE_AUTHENTICATION=yes
@@ -50,4 +50,5 @@ services:
 
 networks:
   easy-chat:
+    name: easy-chat
     driver: bridge

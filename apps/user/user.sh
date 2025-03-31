@@ -4,3 +4,4 @@ docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 
 docker exec -it mysql sh
+goctl api go -api apps/user/api/user.api -dir apps/user/api -style gozero

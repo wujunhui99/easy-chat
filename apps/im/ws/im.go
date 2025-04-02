@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/config"
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/handler"
+	"github.com/junhui99/easy-chat/apps/im/ws/internal/handle"
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/zeromicro/go-zero/core/conf"

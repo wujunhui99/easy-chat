@@ -1,7 +1,12 @@
 #!/bin/bash  
 need_start_server_shell=(
-  # rpc
+  # user
   user-rpc-test.sh
+  user-api-test.sh
+
+  # social
+  social-rpc-test.sh
+  social-api-test.sh
 
 )
 

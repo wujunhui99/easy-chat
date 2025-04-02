@@ -5,7 +5,7 @@ Port: 8888
 UserRpc:
   Etcd:
     Hosts:
-      - 192.168.67.2:3379
+      - ${HOST_IP}:3379
     Key: user.rpc
 JwtAuth:
   AccessSecret: imooc.com

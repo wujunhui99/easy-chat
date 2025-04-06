@@ -22,7 +22,8 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	// conf.MustLoad(*configFile, &c)
+	conf.LoadConfig(*configFile,&c,conf.UseEnv())
 
 	if err := c.SetUp(); err != nil {
 		panic(err)

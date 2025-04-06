@@ -47,6 +47,92 @@ services:
     restart: always
     networks:
       easy-chat:
+  
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: easy-chat
+    ports:
+      - 47017:27017
+    volumes:
+      - ./components/mongo/data:/data/db
+      - /etc/localtime:/etc/localtime
+    restart: always
+    networks:
+      easy-chat:
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - 2181:2181
+    container_name: zookeeper
+    volumes:
+      - /etc/localtime:/etc/localtime
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+      TZ: Asia/Shanghai
+    restart: always
+    networks:
+      easy-chat:
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    restart: always
+    ports:
+      - 9092:9092
+    environment:
+      TZ: Asia/Shanghai
+      KAFKA_BROKER_ID: 0
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "ws2ms_chat:8:1,ms2ps_chat:8:1,msg_to_mongo:8:1"
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://${HOST_IP}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_LISTENERS: INSIDE://:9092
+      KAFKA_HEAP_OPTS: "-Xmx512M -Xms256M"
+    depends_on:
+      - zookeeper
+    
+    networks:
+      easy-chat:
+
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.1-alpine
+    container_name: apisix-dashboard
+    restart: always
+    depends_on:
+      - etcd
+    volumes:
+      - ./components/apisix-dashboard/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+      - "9000:9000"
+    networks:
+      easy-chat:
+
+  apisix:
+    image: apache/apisix:3.9.1-debian
+    container_name: apisix
+    restart: always
+    depends_on:
+      - etcd
+      - apisix-dashboard
+    volumes:
+      - ./components/apisix/config.yaml:/usr/local/apisix/conf/config.yaml
+      - ./components/apisix/logs:/usr/local/apisix/logs
+    ports:
+      - "9180:9180/tcp"
+      - "9080:9080/tcp"
+      - "9091:9091/tcp"
+      - "9443:9443/tcp"
+      - "9093:9092/tcp"
+    environment:
+      - HOST_IP=${HOST_IP}
+    user: "root"  # 添加这行
+    networks:
+      easy-chat:
 
 networks:
   easy-chat:

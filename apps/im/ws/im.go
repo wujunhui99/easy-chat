@@ -10,7 +10,7 @@ import (
 	"fmt"
 
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/config"
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/handle"
+	handler "github.com/junhui99/easy-chat/apps/im/ws/internal/handle"
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/zeromicro/go-zero/core/conf"
@@ -22,7 +22,8 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	// conf.MustLoad(*configFile, &c)
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 
 	if err := c.SetUp(); err != nil {
 		panic(err)
@@ -30,8 +31,8 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	srv := websocket.NewServer(c.ListenOn,
 		websocket.WithServerAuthentication(handler.NewJwtAuth(ctx)),
-		//websocket.WithServerAck(websocket.RigorAck),
-		//websocket.WithServerMaxConnectionIdle(10*time.Second),
+		websocket.WithServerAck(websocket.NoAck),
+		// websocket.WithServerMaxConnectionIdle(10*time.Second),
 	)
 	defer srv.Stop()
 

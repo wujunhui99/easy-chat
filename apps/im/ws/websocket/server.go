@@ -84,7 +84,7 @@ func (s *Server) ServerWs(w http.ResponseWriter, r *http.Request) {
 	if conn == nil {
 		return
 	}
-	//conn, err := s.upgrader.Upgrade(w, r, nil)
+	// conn, err := s.upgrader.Upgrade(w, r, nil)
 	//if err != nil {
 	//	s.Errorf("upgrade err %v", err)
 	//	return

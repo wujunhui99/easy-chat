@@ -1,13 +1,7 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package logic
 
 import (
 	"context"
-
 	"time"
 
 	"github.com/junhui99/easy-chat/apps/im/immodels"
@@ -31,24 +25,20 @@ func NewConversation(ctx context.Context, srv *websocket.Server, svc *svc.Servic
 	}
 }
 
-func (l *Conversation) SingleChat(data *ws.Chat, userId string) error {
+func (l *Conversation) Chat(data *ws.Chat, userId string) error{
 	if data.ConversationId == "" {
 		data.ConversationId = wuid.CombineId(userId, data.RecvId)
 	}
-
-	time.Sleep(time.Minute)
-	// 记录消息
 	chatLog := immodels.ChatLog{
 		ConversationId: data.ConversationId,
-		SendId:         userId,
-		RecvId:         data.RecvId,
-		ChatType:       data.ChatType,
-		MsgFrom:        0,
-		MsgType:        data.MType,
-		MsgContent:     data.Content,
-		SendTime:       time.Now().UnixNano(),
+
+		SendId:     userId,
+		RecvId:     data.RecvId,
+		SendTime:   time.Now().UnixMilli(),
+		MsgType:    data.MType,
+		MsgContent: data.Content,
+		ChatType:   data.ChatType,
 	}
 	err := l.svc.ChatLogModel.Insert(l.ctx, &chatLog)
-
 	return err
 }

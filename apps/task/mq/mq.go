@@ -1,8 +1,3 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package main
 
 import (
@@ -22,19 +17,19 @@ func main() {
 	flag.Parse()
 
 	var c config.Config
-	// conf.MustLoad(*configFile, &c)
-	conf.LoadConfig(*configFile,&c,conf.UseEnv())
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
+
 
 	if err := c.SetUp(); err != nil {
 		panic(err)
 	}
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
 	ctx := svc.NewServiceContext(c)
 	listen := handler.NewListen(ctx)
-
-	serviceGroup := service.NewServiceGroup()
 	for _, s := range listen.Services() {
 		serviceGroup.Add(s)
 	}
-	fmt.Println("Starting mqueue at ...")
+	fmt.Println("Starting server at", c.ListenOn)
 	serviceGroup.Start()
 }

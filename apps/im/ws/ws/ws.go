@@ -1,35 +1,21 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package ws
 
 import "github.com/junhui99/easy-chat/pkg/constants"
 
 type (
 	Msg struct {
-		constants.MType `mapstructure:"mType"`
+		constants.MType `mapstructure:"msgType"`
 		Content         string `mapstructure:"content"`
 	}
+)
 
+type (
 	Chat struct {
-		ConversationId     string `mapstructure:"conversationId"`
-		constants.ChatType `mapstructure:"chatType"`
-		SendId             string `mapstructure:"sendId"`
-		RecvId             string `mapstructure:"recvId"`
-		SendTime           int64  `mapstructure:"sendTime"`
-		Msg                `mapstructure:"msg"`
-	}
-
-	Push struct {
-		ConversationId     string `mapstructure:"conversationId"`
-		constants.ChatType `mapstructure:"chatType"`
-		SendId             string `mapstructure:"sendId"`
-		RecvId             string `mapstructure:"recvId"`
-		SendTime           int64  `mapstructure:"sendTime"`
-
-		constants.MType `mapstructure:"mType"`
-		Content         string `mapstructure:"content"`
+		ConversationId string             `mapstructure:"conversationId"`
+		SendId             string                    `mapstructure:"sendId"`    
+		RecvId             string                    `mapstructure:"recvId"`   
+		SendTime           int64                     `mapstructure:"sendTime"`  
+		ChatType       constants.ChatType `mapstructure:"chatType"`
+		Msg            `mapstructure:"msg"`
 	}
 )

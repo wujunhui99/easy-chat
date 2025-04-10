@@ -1,8 +1,3 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package websocket
 
 import (
@@ -15,7 +10,6 @@ type Authentication interface {
 	Auth(w http.ResponseWriter, r *http.Request) bool
 	UserId(r *http.Request) string
 }
-
 type authentication struct{}
 
 func (*authentication) Auth(w http.ResponseWriter, r *http.Request) bool {

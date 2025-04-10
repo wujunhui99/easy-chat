@@ -1,8 +1,3 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package handler
 
 import (
@@ -20,9 +15,11 @@ func NewListen(svc *svc.ServiceContext) *Listen {
 	return &Listen{svc: svc}
 }
 
+//返回多个消费者对象
+
 func (l *Listen) Services() []service.Service {
+
 	return []service.Service{
-		// todo: 此处可以加载多个消费者
 		kq.MustNewQueue(l.svc.Config.MsgChatTransfer, msgTransfer.NewMsgChatTransfer(l.svc)),
 	}
 }

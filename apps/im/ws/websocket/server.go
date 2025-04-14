@@ -90,11 +90,11 @@ func (s *Server) handlerConn(conn *Conn) {
 		switch message.FrameType {
 		case FramePing:
 			s.Send(&Message{FrameType: FramePing},conn)
-		case FrameDate:
+		case FrameData:
 			if handler, ok := s.routers[message.Method]; ok {
 				handler(s, conn, &message)
 			} else {
-				s.Send(&Message{FrameType: FrameDate, Data: fmt.Sprintf("不存在方法 %v \n",message.Method)}, conn)
+				s.Send(&Message{FrameType: FrameData, Data: fmt.Sprintf("不存在方法 %v \n",message.Method)}, conn)
 			}
 	}
 	}

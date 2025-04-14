@@ -19,10 +19,14 @@ func main() {
 	var c config.Config
 	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 
+	// 在 main.go 中加载完配置后，添加这行代码进行调试
 
 	if err := c.SetUp(); err != nil {
 		panic(err)
 	}
+	// fmt.Printf("Redis Host after config loading: %s\n", c.Redisx.Host)
+	// fmt.Println(c)
+	
 	serviceGroup := service.NewServiceGroup()
 	defer serviceGroup.Stop()
 	ctx := svc.NewServiceContext(c)

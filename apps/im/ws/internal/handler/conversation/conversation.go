@@ -1,12 +1,10 @@
 package conversation
 
 import (
-	"context"
-
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/logic"
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/junhui99/easy-chat/apps/im/ws/ws"
+	"github.com/junhui99/easy-chat/apps/task/mq/mq"
 	"github.com/junhui99/easy-chat/pkg/constants"
 	"github.com/junhui99/easy-chat/pkg/wuid"
 	"github.com/mitchellh/mapstructure"
@@ -28,14 +26,22 @@ func Chat(svcCtx *svc.ServiceContext) websocket.HandlerFunc {
 				data.ConversationId = data.RecvId
 			}
 		}
-		l := logic.NewConversation(context.Background(), srv, svcCtx)
-		if err := l.Chat(&data, srv.GetUsers(conn)[0]); err != nil {
+
+		err := svcCtx.MsgChatTransferClient.Push(&mq.MsgChatTransfer{
+			ConversationId: data.ConversationId,
+			SendId:         data.SendId,
+			RecvId:         data.RecvId,
+			MType:          data.MType,
+			Content:        data.Content,
+			ChatType:       data.ChatType,
+			SendTime:       data.SendTime,
+		})
+
+		if err != nil {
 			srv.Send(websocket.NewErrMessage(err), conn)
 			return
+
 		}
-		uid := srv.GetUsers(conn)[0]
-		err := srv.SendByUserId(websocket.NewMessage(uid, message.Data), data.RecvId)
-		srv.Info(err)
 
 	}
 }

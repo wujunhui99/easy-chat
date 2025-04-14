@@ -1,15 +1,43 @@
 package svc
 
 import (
+	"net/http"
+
+	"github.com/junhui99/easy-chat/apps/im/immodels"
+	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
 	"github.com/junhui99/easy-chat/apps/task/mq/internal/config"
+	"github.com/junhui99/easy-chat/pkg/constants"
+	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
 type ServiceContext struct {
-	Config config.Config
+	config.Config
+	WsClient websocket.Client
+	*redis.Redis
+	socialclient.Social
+	immodels.ChatLogModel
+	immodels.ConversationModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	return &ServiceContext{
+	svc := &ServiceContext{
 		Config: c,
+		Redis:  redis.MustNewRedis(c.Redisx),
+		// Social:            socialclient.NewSocial(zrpc.MustNewClient(c.SocialRpc)),
+		ChatLogModel:      immodels.MustChatLogModel(c.Mongo.Url, c.Mongo.Db),
+		ConversationModel: immodels.MustConversationModel(c.Mongo.Url, c.Mongo.Db),
 	}
+	token, err := svc.GetSystemToken()
+	if err != nil {
+		panic(err)
+	}
+	header := http.Header{}
+	header.Set("Authorization", token)
+	svc.WsClient = websocket.NewClient(c.Ws.Host, websocket.WithClientHeader(header))
+	return svc
+}
+
+func (svc *ServiceContext) GetSystemToken() (string, error) {
+	return svc.Redis.Get(constants.REDIS_SYSTEM_ROOT_TOKEN)
 }

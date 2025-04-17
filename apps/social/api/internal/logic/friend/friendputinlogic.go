@@ -27,7 +27,7 @@ func NewFriendPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Frien
 func (l *FriendPutInLogic) FriendPutIn(req *types.FriendPutInReq) (resp *types.FriendPutInResp, err error) {
 	// todo: add your logic here and delete this line
 
-	uid := ctxdata.GetUId(l.ctx)
+	uid := ctxdata.GetUid(l.ctx)
 
 	_, err = l.svcCtx.Social.FriendPutIn(l.ctx, &socialclient.FriendPutInReq{
 		UserId:  uid,

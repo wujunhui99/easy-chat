@@ -2,9 +2,7 @@ package config
 
 import (
 	"github.com/zeromicro/go-zero/core/service"
-	"github.com/zeromicro/go-zero/core/stores/redis"
 )
-
 
 type Config struct {
 	service.ServiceConf
@@ -14,7 +12,6 @@ type Config struct {
 	JwtAuth struct {
 		AccessSecret string
 	}
-	Redisx          redis.RedisConf
 	Mongo struct {
 		Url string
 		Db  string
@@ -24,6 +21,4 @@ type Config struct {
 		Topic string
 		Addrs []string
 	}
-
-
 }

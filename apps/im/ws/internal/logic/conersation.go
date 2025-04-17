@@ -34,7 +34,7 @@ func (l *Conversation) Chat(data *ws.Chat, userId string) error{
 
 		SendId:     userId,
 		RecvId:     data.RecvId,
-		SendTime:   time.Now().UnixMilli(),
+		SendTime:   time.Now().UnixNano(),
 		MsgType:    data.MType,
 		MsgContent: data.Content,
 		ChatType:   data.ChatType,

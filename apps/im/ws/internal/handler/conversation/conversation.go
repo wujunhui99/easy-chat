@@ -1,6 +1,8 @@
 package conversation
 
 import (
+	"time"
+
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/junhui99/easy-chat/apps/im/ws/ws"
@@ -29,12 +31,12 @@ func Chat(svcCtx *svc.ServiceContext) websocket.HandlerFunc {
 
 		err := svcCtx.MsgChatTransferClient.Push(&mq.MsgChatTransfer{
 			ConversationId: data.ConversationId,
-			SendId:         data.SendId,
+			SendId:         conn.Uid,
 			RecvId:         data.RecvId,
 			MType:          data.MType,
 			Content:        data.Content,
 			ChatType:       data.ChatType,
-			SendTime:       data.SendTime,
+			SendTime:       time.Now().UnixNano(),
 		})
 
 		if err != nil {

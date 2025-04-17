@@ -24,7 +24,7 @@ func main() {
 	if err := c.SetUp(); err != nil {
 		panic(err)
 	}
-	// fmt.Printf("Redis Host after config loading: %s\n", c.Redisx.Host)
+	fmt.Printf("Redis Host after config loading: %s\n", c.Redisx.Host)
 	// fmt.Println(c)
 	
 	serviceGroup := service.NewServiceGroup()

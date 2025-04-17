@@ -1,6 +1,8 @@
 package push
 
 import (
+	"fmt"
+
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/junhui99/easy-chat/apps/im/ws/ws"
@@ -14,11 +16,13 @@ func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
 			srv.Send(websocket.NewErrMessage(err))
 			return
 		}
-
+		fmt.Println("exe push")
+		fmt.Println(data.RecvId)
 		// 发送的目标
 		rconn := srv.GetConn(data.RecvId)
 		if rconn == nil {
 			// todo: 目标离线
+			fmt.Println("user offline")
 			return
 		}
 

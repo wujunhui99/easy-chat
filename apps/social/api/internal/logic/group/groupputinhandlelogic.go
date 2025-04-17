@@ -31,7 +31,7 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(req *types.GroupPutInHandleRep)
 	_, err = l.svcCtx.Social.GroupPutInHandle(l.ctx, &socialclient.GroupPutInHandleReq{
 		GroupReqId:   req.GroupReqId,
 		GroupId:      req.GroupId,
-		HandleUid:    ctxdata.GetUId(l.ctx),
+		HandleUid:    ctxdata.GetUid(l.ctx),
 		HandleResult: req.HandleResult,
 	})
 

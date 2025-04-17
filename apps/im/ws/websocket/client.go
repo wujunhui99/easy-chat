@@ -2,6 +2,7 @@ package websocket
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/url"
 
 	"github.com/gorilla/websocket"
@@ -46,14 +47,19 @@ func (c *client) dail() (*websocket.Conn, error) {
 //发送消息
 
 func (c *client) Send(v any) error {
+	fmt.Println("client try send")
 	data, err := json.Marshal(v)
 	if err != nil {
 		return err
 	}
 	err = c.WriteMessage(websocket.TextMessage, data)
+	fmt.Println("client send data ", string(data))
 	if err == nil {
 		return nil
 	}
+	
+	fmt.Println("client send err ", err)
+	fmt.Println("client  send fail")
 	//todo: 客户端增加重连发送
 	conn, err := c.dail()
 	if err != nil {

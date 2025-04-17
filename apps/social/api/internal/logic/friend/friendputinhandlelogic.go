@@ -29,7 +29,7 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(req *types.FriendPutInHandleR
 
 	_, err = l.svcCtx.Social.FriendPutInHandle(l.ctx, &socialclient.FriendPutInHandleReq{
 		FriendReqId:  req.FriendReqId,
-		UserId:       ctxdata.GetUId(l.ctx),
+		UserId:       ctxdata.GetUid(l.ctx),
 		HandleResult: req.HandleResult,
 	})
 

@@ -29,7 +29,7 @@ func (l *FriendPutInListLogic) FriendPutInList(req *types.FriendPutInListReq) (r
 	// todo: add your logic here and delete this line
 
 	list, err := l.svcCtx.Social.FriendPutInList(l.ctx, &socialclient.FriendPutInListReq{
-		UserId: ctxdata.GetUId(l.ctx),
+		UserId: ctxdata.GetUid(l.ctx),
 	})
 	if err != nil {
 		return nil, err

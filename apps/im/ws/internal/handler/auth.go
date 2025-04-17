@@ -27,26 +27,26 @@ func NewJwtAuth(svc *svc.ServiceContext) *JwtAuth {
 }
 
 func (j *JwtAuth) Auth(w http.ResponseWriter, r *http.Request) bool {
-	fmt.Println("JwtAuth Auth")
+	// fmt.Println("JwtAuth Auth")
 	tok, err := j.parser.ParseToken(r, j.svc.Config.JwtAuth.AccessSecret, "")
 	if err != nil {
 		j.Errorf("parse token err %v ", err)
 		return false
 	}
-	fmt.Println("token")
+	// fmt.Println("token")
 	// fmt.Println("tok " ,tok.Raw)
 	if !tok.Valid {
 		fmt.Println("token not valid")
 		return false
 	}
 	fmt.Println("token valid")
-	fmt.Printf("Claims type: %T, value: %+v\n", tok.Claims, tok.Claims)
+	// fmt.Printf("Claims type: %T, value: %+v\n", tok.Claims, tok.Claims)
 	claims, ok := tok.Claims.(jwt.MapClaims)
 	if !ok {
 		fmt.Println("token claims not ok")
 		return false
 	}
-	
+
 	*r = *r.WithContext(context.WithValue(r.Context(), ctxdata.Identify, claims[ctxdata.Identify]))
 
 	return true
@@ -54,5 +54,5 @@ func (j *JwtAuth) Auth(w http.ResponseWriter, r *http.Request) bool {
 }
 
 func (j *JwtAuth) UserId(r *http.Request) string {
-	return ctxdata.GetUId(r.Context())
+	return ctxdata.GetUid(r.Context())
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/junhui99/easy-chat/apps/social/rpc/internal/server"
 	"github.com/junhui99/easy-chat/apps/social/rpc/internal/svc"
 	"github.com/junhui99/easy-chat/apps/social/rpc/social"
+	"github.com/junhui99/easy-chat/pkg/wuid"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -23,9 +24,9 @@ func main() {
 
 	var c config.Config
 	// conf.MustLoad(*configFile, &c)
-	conf.LoadConfig(*configFile,&c,conf.UseEnv())
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
-
+	wuid.Init(c.Mysql.DataSource)
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		social.RegisterSocialServer(grpcServer, server.NewSocialServer(ctx))
 

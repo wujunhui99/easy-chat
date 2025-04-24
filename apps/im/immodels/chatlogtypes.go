@@ -9,6 +9,7 @@ import (
 
 var DefaultChatLogLimit int64 = 100
 
+// 储存聊天消息的 mongo
 type ChatLog struct {
 	ID primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 
@@ -21,6 +22,8 @@ type ChatLog struct {
 	MsgContent     string             `bson:"msgContent"`
 	SendTime       int64              `bson:"sendTime"`
 	Status         int                `bson:"status"`
+	// 已读记录，bitmap
+	ReadRecords []byte `bson:"readRecords"`
 
 	// TODO: Fill your own fields
 	UpdateAt time.Time `bson:"updateAt,omitempty" json:"updateAt,omitempty"`

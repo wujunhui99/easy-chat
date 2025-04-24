@@ -13,3 +13,9 @@ install-server:
 
 install-server-user-rpc:
 	cd ./deploy/script && chmod +x user-rpc-test.sh && ./user-rpc-test.sh
+install-server-user-api:
+	cd ./deploy/script && chmod +x user-api-test.sh && ./user-api-test.sh
+install-server-social-rpc:
+	cd ./deploy/script && chmod +x social-rpc-test.sh && ./social-rpc-test.sh
+install-server-social-api:
+	cd ./deploy/script && chmod +x social-api-test.sh && ./social-api-test.sh

@@ -111,7 +111,7 @@ func (l *SetUpUserConversationLogic) setUpUserConversation(conversationId, userI
 	// 添加会话记录
 	conversations.ConversationList[conversationId] = &immodels.Conversation{
 		ConversationId: conversationId,
-		ChatType:       constants.SingleChatType,
+		ChatType:       chatType,
 		IsShow:         isShow,
 	}
 

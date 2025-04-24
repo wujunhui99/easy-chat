@@ -9,6 +9,7 @@ import (
 	"github.com/junhui99/easy-chat/apps/user/rpc/internal/svc"
 	"github.com/junhui99/easy-chat/apps/user/rpc/user"
 	"github.com/junhui99/easy-chat/pkg/interceptor/rpcserver"
+	"github.com/junhui99/easy-chat/pkg/wuid"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -24,12 +25,13 @@ func main() {
 
 	var c config.Config
 	// conf.MustLoad(*configFile, &c,conf.UseEnv())
-	conf.LoadConfig(*configFile,&c,conf.UseEnv())
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
 
 	if err := ctx.SetRootToken(); err != nil {
 		panic(err)
 	}
+	wuid.Init(c.Mysql.DataSource)
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		user.RegisterUserServer(grpcServer, server.NewUserServer(ctx))
 

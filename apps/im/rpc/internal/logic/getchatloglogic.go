@@ -25,15 +25,15 @@ func NewGetChatLogLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetCha
 	}
 }
 
-// 获取会话记录
 func (l *GetChatLogLogic) GetChatLog(in *im.GetChatLogReq) (*im.GetChatLogResp, error) {
-	// todo: add your logic here and delete this line
+	// 如果请求中提供了 msgId，直接查询该消息记录
 	if in.MsgId != "" {
 		chatLog, err := l.svcCtx.ChatLogModel.FindOne(l.ctx, in.MsgId)
 		if err != nil {
-			return nil, errors.Wrapf(xerr.NewDBErr(), "find chatlog by msgId err %v, req %v", err, in.MsgId)
+			// 如果查询过程中发生错误，返回包装后的错误信息
+			return nil, errors.Wrapf(xerr.NewDBErr(), "find chatlog by msgId %s failed", in.MsgId)
 		}
-
+		// 构造并返回响应对象，包含查询到的单条聊天记录
 		return &im.GetChatLogResp{
 			List: []*im.ChatLog{
 				{
@@ -45,30 +45,35 @@ func (l *GetChatLogLogic) GetChatLog(in *im.GetChatLogReq) (*im.GetChatLogResp, 
 					MsgContent:     chatLog.MsgContent,
 					ChatType:       int32(chatLog.ChatType),
 					SendTime:       chatLog.SendTime,
+					ReadRecords:    chatLog.ReadRecords,
 				},
 			},
 		}, nil
 	}
-	// 时间段分段查询
+
+	// 如果没有提供 msgId，基于时间范围查询聊天记录
 	data, err := l.svcCtx.ChatLogModel.ListBySendTime(l.ctx, in.ConversationId, in.StartSendTime, in.EndSendTime, in.Count)
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewDBErr(), "ListBySendTime err %v, req %v", err, in)
+		// 如果查询过程中发生错误，返回包装后的错误信息
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find chatLog list by SendTime failed, err: %v req: %v", err.Error(), in)
 	}
 
+	// 构造查询结果列表
 	res := make([]*im.ChatLog, 0, len(data))
-	for _, datum := range data {
+	for _, v := range data {
 		res = append(res, &im.ChatLog{
-			Id:             datum.ID.Hex(),
-			ConversationId: datum.ConversationId,
-			SendId:         datum.SendId,
-			RecvId:         datum.RecvId,
-			MsgType:        int32(datum.MsgType),
-			MsgContent:     datum.MsgContent,
-			ChatType:       int32(datum.ChatType),
-			SendTime:       datum.SendTime,
+			Id:             v.ID.Hex(),
+			ConversationId: v.ConversationId,
+			SendId:         v.SendId,
+			RecvId:         v.RecvId,
+			MsgType:        int32(v.MsgType),
+			MsgContent:     v.MsgContent,
+			ChatType:       int32(v.ChatType),
+			SendTime:       v.SendTime,
+			ReadRecords:    v.ReadRecords,
 		})
 	}
-
+	// 返回包含聊天记录列表的响应对象
 	return &im.GetChatLogResp{
 		List: res,
 	}, nil

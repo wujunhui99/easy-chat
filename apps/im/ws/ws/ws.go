@@ -4,8 +4,10 @@ import "github.com/junhui99/easy-chat/pkg/constants"
 
 type (
 	Msg struct {
+		MsgId           string `mapstructure:"msgId"`
 		constants.MType `mapstructure:"msgType"`
-		Content         string `mapstructure:"content"`
+		ReadRecords     map[string]string `mapstructure:"readRecords"`
+		Content         string            `mapstructure:"content"`
 	}
 )
 
@@ -21,11 +23,26 @@ type (
 )
 
 type Push struct {
-	ChatType constants.ChatType `mapstructure:"chatType"`
-	ConversationId string             `mapstructure:"conversationId"`
-	RecvId         string             `mapstructure:"recvId"`
-	SendId         string             `mapstructure:"sendId"`
+	ChatType        constants.ChatType `mapstructure:"chatType"`
+	ConversationId  string             `mapstructure:"conversationId"`
+	RecvId          string             `mapstructure:"recvId"`
+	RecvIds         []string           `mapstructure:"recvIds"`
+	SendId          string             `mapstructure:"sendId"`
 	constants.MType `mapstructure:"mType"`
-	Content 	   string `mapstructure:"content"`
-	SendTime       int64              `mapstructure:"sendTime"`
+	Content         string            `mapstructure:"content"`
+	ReadRecords     map[string]string `mapstructure:"readRecords"`
+	MsgId       string                `mapstructure:"msgId"`
+	ContentType constants.ContentType `mapstructure:"contentType"`
+
+
+
+
+	SendTime int64 `mapstructure:"sendTime"`
+}
+
+type MarkRead struct {
+	constants.ChatType `mapstructure:"chatType"`
+	RecvId             string   `mapstructure:"recvId"`
+	ConversationId     string   `mapstructure:"conversationId"`
+	MsgIds             []string `mapstructure:"msgIds"`
 }

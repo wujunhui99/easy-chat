@@ -1,6 +1,7 @@
 package mqclient
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/junhui99/easy-chat/apps/task/mq/mq"
@@ -25,5 +26,26 @@ func (c *MsgChatTransferClient) Push(msg *mq.MsgChatTransfer) error {
 	if err != nil {
 		return err
 	}
-	return c.pusher.Push(string(body))
+	return c.pusher.Push(context.Background(),string(body))
+}
+
+type MsgReadTransferClient interface {
+	Push(msg *mq.MsgMarkRead) error
+}
+type msgReadTransferClient struct {
+	pusher *kq.Pusher
+}
+
+func (m *msgReadTransferClient) Push(msg *mq.MsgMarkRead) error {
+	body, err := json.Marshal(msg)
+	if err != nil {
+		return err
+	}
+	return m.pusher.Push(context.Background(), string(body))
+}
+
+func NewMsgReadTransferClient(addr []string, topic string, opts ...kq.PushOption) MsgReadTransferClient {
+	return &msgReadTransferClient{
+		pusher: kq.NewPusher(addr, topic),
+	}
 }

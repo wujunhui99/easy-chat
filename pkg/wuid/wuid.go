@@ -1,17 +1,15 @@
-/**
- * @author: dn-jinmin/dn-jinmin
- * @doc:
- */
-
 package wuid
 
 import (
 	"database/sql"
 	"fmt"
-	"github.com/edwingeng/wuid/mysql/wuid"
 	"sort"
 	"strconv"
+
+	"github.com/edwingeng/wuid/mysql/wuid"
 )
+
+// 生成唯一的 id，每次检查 mysql 防止出现重复id
 
 var w *wuid.WUID
 
@@ -37,6 +35,7 @@ func GenUid(dsn string) string {
 	return fmt.Sprintf("%#016x", w.Next())
 }
 
+// 将两个 id 组合成新 id
 func CombineId(aid, bid string) string {
 	ids := []string{aid, bid}
 

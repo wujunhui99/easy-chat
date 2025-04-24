@@ -15,7 +15,9 @@ type chatLogModel interface {
 	Insert(ctx context.Context, data *ChatLog) error
 	FindOne(ctx context.Context, id string) (*ChatLog, error)
 	ListBySendTime(ctx context.Context, conversationId string, startSendTime, endSendTime, limit int64) ([]*ChatLog, error)
+	ListByMsgIds(ctx context.Context, msgIds []string) ([]*ChatLog, error)
 	Update(ctx context.Context, data *ChatLog) error
+	UpdateMarkRead(ctx context.Context, id primitive.ObjectID, readRecords []byte) error
 	Delete(ctx context.Context, id string) error
 }
 
@@ -28,11 +30,11 @@ func newDefaultChatLogModel(conn *mon.Model) *defaultChatLogModel {
 }
 
 func (m *defaultChatLogModel) Insert(ctx context.Context, data *ChatLog) error {
-	if !data.ID.IsZero() {
-		data.ID = primitive.NewObjectID()
-		data.CreateAt = time.Now()
-		data.UpdateAt = time.Now()
-	}
+	//if !data.ID.IsZero() {
+	//	data.ID = primitive.NewObjectID()
+	//	data.CreateAt = time.Now()
+	//	data.UpdateAt = time.Now()
+	//}
 
 	_, err := m.conn.InsertOne(ctx, data)
 	return err
@@ -64,6 +66,14 @@ func (m *defaultChatLogModel) Update(ctx context.Context, data *ChatLog) error {
 	return err
 }
 
+
+func (m *defaultChatLogModel) UpdateMarkRead(ctx context.Context, id primitive.ObjectID, readRecords []byte) error {
+	_, err := m.conn.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{
+		"readRecords": readRecords,
+	}})
+	return err
+}
+
 func (m *defaultChatLogModel) Delete(ctx context.Context, id string) error {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -73,8 +83,33 @@ func (m *defaultChatLogModel) Delete(ctx context.Context, id string) error {
 	_, err = m.conn.DeleteOne(ctx, bson.M{"_id": oid})
 	return err
 }
+func (m *defaultChatLogModel) ListByMsgIds(ctx context.Context, msgIds []string) ([]*ChatLog, error) {
+	var data []*ChatLog
 
-// 查询聊天记录
+	ids := make([]primitive.ObjectID, 0, len(msgIds))
+	for _, id := range msgIds {
+		oid, _ := primitive.ObjectIDFromHex(id)
+		ids = append(ids, oid)
+	}
+
+	filter := bson.M{
+		"_id": bson.M{
+			"$in": ids,
+		},
+	}
+
+	err := m.conn.Find(ctx, &data, filter)
+	switch err {
+	case nil:
+		return data, nil
+	case mon.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+// 根据时间查找聊天记录，并且设置限量
 func (m *defaultChatLogModel) ListBySendTime(ctx context.Context, conversationId string, startSendTime, endSendTime, limit int64) ([]*ChatLog, error) {
 	var data []*ChatLog
 

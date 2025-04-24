@@ -9,6 +9,7 @@ import (
 	"github.com/junhui99/easy-chat/apps/task/mq/internal/config"
 	"github.com/junhui99/easy-chat/pkg/constants"
 	"github.com/zeromicro/go-zero/core/stores/redis"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type ServiceContext struct {
@@ -24,7 +25,8 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	svc := &ServiceContext{
 		Config: c,
 		Redis:  redis.MustNewRedis(c.Redisx),
-		// Social:            socialclient.NewSocial(zrpc.MustNewClient(c.SocialRpc)),
+
+		Social:            socialclient.NewSocial(zrpc.MustNewClient(c.SocialRpc)),
 		ChatLogModel:      immodels.MustChatLogModel(c.Mongo.Url, c.Mongo.Db),
 		ConversationModel: immodels.MustConversationModel(c.Mongo.Url, c.Mongo.Db),
 	}

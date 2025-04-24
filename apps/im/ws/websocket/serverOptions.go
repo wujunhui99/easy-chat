@@ -8,7 +8,7 @@ type serverOption struct {
 	Authentication
 	ack        AckType
 	ackTimeout time.Duration
-
+	concurrency int
 	pattern string
 	maxConnectionIdle time.Duration
 }
@@ -19,6 +19,7 @@ func newServerOptions(opts ...ServerOptions) serverOption {
 		maxConnectionIdle: defaultMaxConnectionIdle,
 		ackTimeout:        defaultAckTimeout,
 		pattern:        "/ws",
+		concurrency:     defaultConcurrency,
 	}
 	for _, opt := range opts {
 		opt(&o)

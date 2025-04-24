@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/junhui99/easy-chat/apps/im/rpc/imclient"
 	"github.com/junhui99/easy-chat/apps/social/api/internal/config"
 	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
 	"github.com/junhui99/easy-chat/apps/user/rpc/userclient"
@@ -8,15 +9,17 @@ import (
 )
 
 type ServiceContext struct {
-	Config    config.Config
+	Config config.Config
 	userclient.User
 	socialclient.Social
+	imclient.Im
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:    c,
+		Config: c,
 		User:   userclient.NewUser(zrpc.MustNewClient(c.UserRpc)),
 		Social: socialclient.NewSocial(zrpc.MustNewClient(c.SocialRpc)),
+		Im:     imclient.NewIm(zrpc.MustNewClient(c.ImRpc)),
 	}
 }

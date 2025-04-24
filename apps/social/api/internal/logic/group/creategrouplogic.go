@@ -3,6 +3,7 @@ package group
 import (
 	"context"
 
+	"github.com/junhui99/easy-chat/apps/im/rpc/imclient"
 	"github.com/junhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/junhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
@@ -29,7 +30,7 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.G
 	uid := ctxdata.GetUid(l.ctx)
 
 	// 创建群
-	_, err = l.svcCtx.Social.GroupCreate(l.ctx, &socialclient.GroupCreateReq{
+	res, err := l.svcCtx.Social.GroupCreate(l.ctx, &socialclient.GroupCreateReq{
 		Name:       req.Name,
 		Icon:       req.Icon,
 		CreatorUid: uid,
@@ -37,6 +38,15 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.G
 	if err != nil {
 		return nil, err
 	}
+
+	if res.Id == "" {
+		return nil, err
+	}
+
+	_, err = l.svcCtx.Im.CreateGroupConversation(l.ctx, &imclient.CreateGroupConversationReq{
+		GroupId:  res.Id,
+		CreateId: uid,
+	})
 
 	return
 }

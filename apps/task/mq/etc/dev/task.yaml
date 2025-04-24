@@ -10,10 +10,36 @@ MsgChatTransfer:
   Offset: first
   Consumers: 1
 
+
+
+MsgReadTransfer:
+  Name: MsgReadTransfer
+  Brokers:
+    - ${HOST_IP}:9092
+  Group: kafka
+  Topic: msgReadTransfer
+  Offset: first
+  Consumers: 1
+
+# 群聊消息已读推送缓存的配置
+MsgReadHandler:
+  # 是否开启
+  GroupMsgReadHandler: 1
+  # 缓存时间
+  GroupMsgReadRecordDelayTime: 60
+  # 缓存上限
+  GroupMsgReadRecordDelayCount: 2
+
 Redisx:
   Host: ${HOST_IP}:16379
   Type: node
   Pass: easy-chat
+
+SocialRpc:
+  Etcd:
+    Hosts:
+      - ${HOST_IP}:3379
+    Key: social.rpc
 
 Mongo:
   Url: "mongodb://root:easy-chat@${HOST_IP}:47017"

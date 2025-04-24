@@ -3,9 +3,11 @@ package group
 import (
 	"context"
 
+	"github.com/junhui99/easy-chat/apps/im/rpc/imclient"
 	"github.com/junhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/junhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
+	"github.com/junhui99/easy-chat/pkg/constants"
 	"github.com/junhui99/easy-chat/pkg/ctxdata"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -28,12 +30,22 @@ func (l *GroupPutInLogic) GroupPutIn(req *types.GroupPutInRep) (resp *types.Grou
 	// todo: add your logic here and delete this line
 	uid := ctxdata.GetUid(l.ctx)
 
-	_, err = l.svcCtx.Social.GroupPutin(l.ctx, &socialclient.GroupPutinReq{
+	res, err := l.svcCtx.Social.GroupPutin(l.ctx, &socialclient.GroupPutinReq{
 		GroupId:    req.GroupId,
 		ReqId:      uid,
 		ReqMsg:     req.ReqMsg,
 		ReqTime:    req.ReqTime,
 		JoinSource: int32(req.JoinSource),
+	})
+
+	if res.GroupId == "" {
+		return nil, err
+	}
+	// 创建进入群的用户和群的会话
+	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &imclient.SetUpUserConversationReq{
+		SendId:   uid,
+		RecvId:   res.GroupId,
+		ChatType: int32(constants.GroupChatType),
 	})
 	return
 }

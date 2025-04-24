@@ -2,69 +2,78 @@ package msgTransfer
 
 import (
 	"context"
+
 	"encoding/json"
 	"fmt"
 
 	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/junhui99/easy-chat/apps/im/ws/ws"
 	"github.com/junhui99/easy-chat/apps/task/mq/internal/svc"
 	"github.com/junhui99/easy-chat/apps/task/mq/mq"
-	"github.com/junhui99/easy-chat/pkg/constants"
-	"github.com/zeromicro/go-queue/kq"
-	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/junhui99/easy-chat/pkg/bitmap"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type MsgChatTransfer struct {
-	logx.Logger
-	svcCtx *svc.ServiceContext
+	*baseMsgTransfer
 }
 
-func NewMsgChatTransfer(svcCtx *svc.ServiceContext) kq.ConsumeHandler {
+func NewMsgChatTransfer(svc *svc.ServiceContext) *MsgChatTransfer {
 	return &MsgChatTransfer{
-		Logger: logx.WithContext(context.Background()),
-		svcCtx: svcCtx,
+		NewBaseMsgTransfer(svc),
 	}
 }
 
-func (m *MsgChatTransfer) Consume(key, value string) error {
-	fmt.Println("MsgChatTransfer Consume")
-	fmt.Println("key: ", key)
-	fmt.Println("value: ", value)
+//实现kafka消费者
 
+func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error {
+	fmt.Println("key: ", key, "value: ", value)
 	var (
-		data mq.MsgChatTransfer
-		ctx  = context.Background()
+		data  mq.MsgChatTransfer
+		msgId = primitive.NewObjectID()
 	)
 	if err := json.Unmarshal([]byte(value), &data); err != nil {
-		m.Logger.Errorf("MsgChatTransfer Consume json.Unmarshal err: %v", err)
 		return err
 	}
 
-	if err := m.addChatLog(ctx, data); err != nil {
-		m.Logger.Errorf("MsgChatTransfer Consume addChatLog err: %v", err)
+	//记录数据
+	if err := m.addChatLog(ctx, msgId, &data); err != nil {
 		return err
 	}
-	return m.svcCtx.WsClient.Send(websocket.Message{
-		FrameType: websocket.FrameData,
-		Method:    "push",
-		FromId:    constants.SYSTEM_ROOT_UID,
-		Data:      data,
+
+	return m.Transfer(ctx, &ws.Push{
+		ConversationId: data.ConversationId,
+		ChatType:       data.ChatType,
+		SendId:         data.SendId,
+		RecvId:         data.RecvId,
+		RecvIds:        data.RecvIds,
+		SendTime:       data.SendTime,
+		MType:          data.MType,
+		MsgId:          data.MsgId,
+		Content:        data.Content,
 	})
-
 }
-func (m *MsgChatTransfer) addChatLog(ctx context.Context, data mq.MsgChatTransfer) error {
-	// 1.添加聊天记录
-	chatLog := &immodels.ChatLog{
+
+func (m *MsgChatTransfer) addChatLog(ctx context.Context, msgId primitive.ObjectID, data *mq.MsgChatTransfer) error {
+	//记录消息
+	chatLog := immodels.ChatLog{
+		ID:             msgId,
 		ConversationId: data.ConversationId,
 		SendId:         data.SendId,
 		RecvId:         data.RecvId,
+		MsgFrom:        0,
 		MsgType:        data.MType,
-		MsgContent:     data.Content,
 		ChatType:       data.ChatType,
-
+		MsgContent:     data.Content,
+		SendTime:       data.SendTime,
 	}
-	if err := m.svcCtx.ChatLogModel.Insert(ctx, chatLog); err != nil {
+	readRecords := bitmap.NewBitmap(0)
+	readRecords.Set(chatLog.SendId)
+	chatLog.ReadRecords = readRecords.Export()
+	//更新会话
+	err := m.svcCtx.ChatLogModel.Insert(ctx, &chatLog)
+	if err != nil {
 		return err
 	}
-	return m.svcCtx.ConversationModel.UpdateMsg(ctx,chatLog)
+	return m.svcCtx.ConversationModel.UpdateMsg(ctx, &chatLog)
 }

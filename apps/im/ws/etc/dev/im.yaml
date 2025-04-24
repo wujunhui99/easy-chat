@@ -12,3 +12,8 @@ MsgChatTransfer:
   Topic: msgChatTransfer
   Addrs:
     - ${HOST_IP}:9092
+
+MsgReadTransfer:
+  Topic: msgReadTransfer
+  Addrs:
+    - ${HOST_IP}:9092

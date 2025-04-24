@@ -6,6 +6,7 @@ import (
 	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
 	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
 	"github.com/junhui99/easy-chat/apps/im/ws/ws"
+	"github.com/junhui99/easy-chat/pkg/constants"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -19,23 +20,43 @@ func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
 		fmt.Println("exe push")
 		fmt.Println(data.RecvId)
 		// 发送的目标
-		rconn := srv.GetConn(data.RecvId)
-		if rconn == nil {
-			// todo: 目标离线
-			fmt.Println("user offline")
-			return
+		switch data.ChatType {
+		case constants.SingleChatType:
+			single(srv, &data, data.RecvId)
+		case constants.GroupChatType:
+			group(srv, &data)
 		}
-
-		srv.Infof("push msg %v", data)
-
-		srv.Send(websocket.NewMessage(data.SendId, &ws.Chat{
-			ConversationId: data.ConversationId,
-			ChatType:       data.ChatType,
-			SendTime:       data.SendTime,
-			Msg: ws.Msg{
-				MType:   data.MType,
-				Content: data.Content,
-			},
-		}), rconn)
 	}
+}
+
+func single(srv *websocket.Server, data *ws.Push, recvId string) error {
+	rconn := srv.GetConn(recvId)
+	if rconn == nil {
+		// todo: 目标离线
+		return nil
+	}
+
+	srv.Infof("push msg %v", data)
+
+	return srv.Send(websocket.NewMessage(data.SendId, &ws.Chat{
+		ConversationId: data.ConversationId,
+		ChatType:       data.ChatType,
+		SendTime:       data.SendTime,
+		Msg: ws.Msg{
+			MType:   data.MType,
+			Content: data.Content,
+		},
+	}), rconn)
+
+}
+
+func group(srv *websocket.Server, data *ws.Push) error {
+	for _, id := range data.RecvIds {
+		func(id string) {
+			srv.Schedule(func() {
+				single(srv, data, id)
+			})
+		}(id)
+	}
+	return nil
 }

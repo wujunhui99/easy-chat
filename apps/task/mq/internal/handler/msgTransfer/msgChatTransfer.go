@@ -40,7 +40,8 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 	if err := m.addChatLog(ctx, msgId, &data); err != nil {
 		return err
 	}
-
+	fmt.Println("msg id",msgId)
+	fmt.Println("msg daata id", data.MsgId)
 	return m.Transfer(ctx, &ws.Push{
 		ConversationId: data.ConversationId,
 		ChatType:       data.ChatType,
@@ -49,7 +50,7 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 		RecvIds:        data.RecvIds,
 		SendTime:       data.SendTime,
 		MType:          data.MType,
-		MsgId:          data.MsgId,
+		MsgId:          msgId.Hex(),
 		Content:        data.Content,
 	})
 }

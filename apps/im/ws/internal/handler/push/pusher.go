@@ -13,17 +13,20 @@ import (
 func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
 	return func(srv *websocket.Server, conn *websocket.Conn, msg *websocket.Message) {
 		var data ws.Push
+
 		if err := mapstructure.Decode(msg.Data, &data); err != nil {
 			srv.Send(websocket.NewErrMessage(err))
 			return
 		}
 		fmt.Println("exe push")
-		fmt.Println(data.RecvId)
+		fmt.Println("recv id",data.RecvId)
+		fmt.Println("msg id",data.MsgId)
 		// 发送的目标
 		switch data.ChatType {
 		case constants.SingleChatType:
 			single(srv, &data, data.RecvId)
 		case constants.GroupChatType:
+			// fmt.Println("group push x", data.MsgId)
 			group(srv, &data)
 		}
 	}
@@ -36,13 +39,16 @@ func single(srv *websocket.Server, data *ws.Push, recvId string) error {
 		return nil
 	}
 
-	srv.Infof("push msg %v", data)
+	// srv.Infof("push msg %v", data)
+	// fmt.Println("push msg data.id %v", data.MsgId)
 
 	return srv.Send(websocket.NewMessage(data.SendId, &ws.Chat{
 		ConversationId: data.ConversationId,
 		ChatType:       data.ChatType,
 		SendTime:       data.SendTime,
 		Msg: ws.Msg{
+			ReadRecords: data.ReadRecords,
+			MsgId: data.MsgId,
 			MType:   data.MType,
 			Content: data.Content,
 		},

@@ -26,9 +26,9 @@ MsgReadHandler:
   # 是否开启
   GroupMsgReadHandler: 1
   # 缓存时间
-  GroupMsgReadRecordDelayTime: 60
+  GroupMsgReadRecordDelayTime: 1
   # 缓存上限
-  GroupMsgReadRecordDelayCount: 2
+  GroupMsgReadRecordDelayCount: 8
 
 Redisx:
   Host: ${HOST_IP}:16379

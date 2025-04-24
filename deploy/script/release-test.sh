@@ -8,6 +8,14 @@ need_start_server_shell=(
   social-rpc-test.sh
   social-api-test.sh
 
+  # im
+  im-rpc-test.sh
+  im-api-test.sh
+  im-ws-test.sh
+
+  # task
+  task-mq-test.sh
+
 )
 
 for i in ${need_start_server_shell[*]} ; do

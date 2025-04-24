@@ -4,6 +4,7 @@ package msgTransfer
 
 import (
 	"context"
+	"fmt"
 
 	"encoding/base64"
 	"encoding/json"
@@ -73,6 +74,7 @@ func (m *MsgReadTransfer) Consume(ctx context.Context, key, value string) error 
 	if err != nil {
 		return err
 	}
+	fmt.Println("msg id is", data.MsgIds)
 	push := &ws.Push{
 		ConversationId: data.ConversationId,
 		ChatType:       data.ChatType,
@@ -88,6 +90,7 @@ func (m *MsgReadTransfer) Consume(ctx context.Context, key, value string) error 
 	switch data.ChatType {
 	case constants.SingleChatType:
 		//直接推送
+		fmt.Println("single push")
 		m.push <- push
 	case constants.GroupChatType:
 		//判断是否开启合并消息处理

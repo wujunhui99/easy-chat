@@ -14,8 +14,7 @@
     ENV RUN_BIN bin/${SERVER_NAME}-${SERVER_TYPE}
     ENV RUN_CONF /${SERVER_NAME}/conf/${SERVER_NAME}.yaml
 
-    # 这个关键词的意思是复制的意思，可以将宿主机中的内容复制到容器中
-    # 命令 左边是宿主机的目录，右边是容器目录
+
     RUN mkdir /$SERVER_NAME && mkdir /$SERVER_NAME/bin && mkdir /$SERVER_NAME/conf
 
     # 复制编译后的二进制文件

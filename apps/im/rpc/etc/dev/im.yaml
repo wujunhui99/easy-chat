@@ -8,3 +8,8 @@ Etcd:
 Mongo:
   Url: "mongodb://root:easy-chat@${HOST_IP}:47017"
   Db: easy-chat
+
+Telemetry:
+ Name: im.rpc
+ Endpoint: http://${HOST_IP}:14268/api/traces
+ Batcher: jaeger

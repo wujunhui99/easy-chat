@@ -23,7 +23,7 @@ UserRpc:
 JwtAuth:
   AccessSecret: imooc.com
 
-#Telemetry:
-#  Name: im.api
-#  Endpoint: http://192.168.199.138:14268/api/traces
-#  Batcher: jaeger
+Telemetry:
+ Name: im.api
+ Endpoint: http://${HOST_IP}:14268/api/traces
+ Batcher: jaeger

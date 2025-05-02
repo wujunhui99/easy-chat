@@ -20,6 +20,8 @@ type (
 	GetUserInfoResp = user.GetUserInfoResp
 	LoginReq        = user.LoginReq
 	LoginResp       = user.LoginResp
+	LogoutReq       = user.LogoutReq
+	LogoutResp      = user.LogoutResp
 	RegisterReq     = user.RegisterReq
 	RegisterResp    = user.RegisterResp
 	Request         = user.Request
@@ -32,6 +34,7 @@ type (
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 		FindUser(ctx context.Context, in *FindUserReq, opts ...grpc.CallOption) (*FindUserResp, error)
+		Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
 	}
 
 	defaultUser struct {
@@ -68,4 +71,9 @@ func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts 
 func (m *defaultUser) FindUser(ctx context.Context, in *FindUserReq, opts ...grpc.CallOption) (*FindUserResp, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.FindUser(ctx, in, opts...)
+}
+
+func (m *defaultUser) Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error) {
+	client := user.NewUserClient(m.cli.Conn())
+	return client.Logout(ctx, in, opts...)
 }

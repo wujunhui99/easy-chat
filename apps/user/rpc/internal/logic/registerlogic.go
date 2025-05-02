@@ -3,8 +3,10 @@ package logic
 import (
 	"context"
 	"database/sql"
-	"errors"
+
 	"time"
+
+	"github.com/pkg/errors"
 
 	"github.com/junhui99/easy-chat/apps/user/models"
 	"github.com/junhui99/easy-chat/apps/user/rpc/internal/svc"
@@ -12,6 +14,7 @@ import (
 	"github.com/junhui99/easy-chat/pkg/ctxdata"
 	"github.com/junhui99/easy-chat/pkg/encrypt"
 	"github.com/junhui99/easy-chat/pkg/wuid"
+	"github.com/junhui99/easy-chat/pkg/xerr"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -78,7 +81,10 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	if err != nil {
 		return nil, err
 	}
-
+	err = l.svcCtx.Redis.Setex(userEntity.Id+":"+in.DeviceType, token, int(l.svcCtx.Config.Jwt.AccessExpire))
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewDBErr(), "redis setex err %v", err)
+	}
 	return &user.RegisterResp{
 		Token:  token,
 		Expire: now + l.svcCtx.Config.Jwt.AccessExpire,

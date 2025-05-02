@@ -26,6 +26,8 @@ message Response {
 message LoginReq {
   string  phone = 1;
   string  password = 2;
+  string deviceType = 3; // 设备类型
+  string deviceName = 4; // 设备名称
 }
 
 message LoginResp {
@@ -39,6 +41,8 @@ message RegisterReq{
   string  password = 3;
   string  avatar = 4;
   int32   sex = 5;
+  string deviceType = 6; // 设备类型
+  string deviceName = 7; // 设备名称
 }
 
 message RegisterResp {
@@ -63,6 +67,14 @@ message FindUserReq {
 message FindUserResp {
   repeated UserEntity user = 1;
 }
+message LogoutReq {
+  string id = 1;
+  string deviceType = 2;
+}
+
+message LogoutResp {
+  int32 success = 1;
+}
 
 service User {
   rpc Ping(Request) returns (Response);
@@ -74,4 +86,6 @@ service User {
   rpc GetUserInfo(GetUserInfoReq) returns (GetUserInfoResp);
 
   rpc FindUser(FindUserReq) returns (FindUserResp);
+
+  rpc Logout(LogoutReq) returns (LogoutResp);
 } 

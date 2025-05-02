@@ -47,3 +47,8 @@ func (s *UserServer) FindUser(ctx context.Context, in *user.FindUserReq) (*user.
 	l := logic.NewFindUserLogic(ctx, s.svcCtx)
 	return l.FindUser(in)
 }
+
+func (s *UserServer) Logout(ctx context.Context, in *user.LogoutReq) (*user.LogoutResp, error) {
+	l := logic.NewLogoutLogic(ctx, s.svcCtx)
+	return l.Logout(in)
+}

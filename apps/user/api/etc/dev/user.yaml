@@ -10,3 +10,8 @@ UserRpc:
 JwtAuth:
   AccessSecret: imooc.com
   AccessExpire: 8640000
+
+Telemetry:
+ Name: user.api
+ Endpoint: http://${HOST_IP}:14268/api/traces
+ Batcher: jaeger

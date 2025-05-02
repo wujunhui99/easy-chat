@@ -56,7 +56,13 @@ func (l *LoginLogic) Login(in *user.LoginReq) (*user.LoginResp, error) {
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "ctxdata get jwt token err %v", err)
 	}
-
+	// 删除之外的token
+	_, err = l.svcCtx.Redis.Del(userEntity.Id + ":" + in.DeviceType)
+	// 放入redis
+	err = l.svcCtx.Redis.Setex(userEntity.Id+":"+in.DeviceType, token, int(l.svcCtx.Config.Jwt.AccessExpire))
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewDBErr(), "redis setex err %v", err)
+	}
 	return &user.LoginResp{
 		Token:  token,
 		Expire: now + l.svcCtx.Config.Jwt.AccessExpire,

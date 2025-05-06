@@ -9,8 +9,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/junhui99/easy-chat/pkg/xerr"
 	"github.com/pkg/errors"
+	"github.com/wujunhui99/easy-chat/pkg/xerr"
 	"github.com/zeromicro/go-zero/core/logx"
 	zrpcErr "github.com/zeromicro/x/errors"
 	"google.golang.org/grpc/status"

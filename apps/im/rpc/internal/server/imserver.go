@@ -7,9 +7,9 @@ package server
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/im/rpc/im"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/logic"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/logic"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/svc"
 )
 
 type ImServer struct {

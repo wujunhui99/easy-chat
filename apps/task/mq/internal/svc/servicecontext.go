@@ -3,11 +3,11 @@ package svc
 import (
 	"net/http"
 
-	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
-	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/config"
-	"github.com/junhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/config"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 )

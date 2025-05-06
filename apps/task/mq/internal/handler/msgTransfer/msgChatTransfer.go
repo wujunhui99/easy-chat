@@ -6,11 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/ws/ws"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/svc"
-	"github.com/junhui99/easy-chat/apps/task/mq/mq"
-	"github.com/junhui99/easy-chat/pkg/bitmap"
+	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/ws"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/mq"
+	"github.com/wujunhui99/easy-chat/pkg/bitmap"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -40,7 +40,7 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 	if err := m.addChatLog(ctx, msgId, &data); err != nil {
 		return err
 	}
-	fmt.Println("msg id",msgId)
+	fmt.Println("msg id", msgId)
 	fmt.Println("msg daata id", data.MsgId)
 	return m.Transfer(ctx, &ws.Push{
 		ConversationId: data.ConversationId,

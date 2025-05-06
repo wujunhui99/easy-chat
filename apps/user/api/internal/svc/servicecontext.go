@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"github.com/junhui99/easy-chat/apps/user/api/internal/config"
-	"github.com/junhui99/easy-chat/apps/user/rpc/userclient"
+	"github.com/wujunhui99/easy-chat/apps/user/api/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/userclient"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/zrpc"
 )

@@ -3,13 +3,13 @@ package conversation
 import (
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
-	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
-	"github.com/junhui99/easy-chat/apps/im/ws/ws"
-	"github.com/junhui99/easy-chat/apps/task/mq/mq"
-	"github.com/junhui99/easy-chat/pkg/constants"
-	"github.com/junhui99/easy-chat/pkg/wuid"
 	"github.com/mitchellh/mapstructure"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/ws"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/mq"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/pkg/wuid"
 )
 
 func Chat(svcCtx *svc.ServiceContext) websocket.HandlerFunc {
@@ -47,7 +47,6 @@ func Chat(svcCtx *svc.ServiceContext) websocket.HandlerFunc {
 
 	}
 }
-
 
 func MarkRead(svc *svc.ServiceContext) websocket.HandlerFunc {
 	return func(srv *websocket.Server, conn *websocket.Conn, msg *websocket.Message) {

@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/config"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/handler"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/handler"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 )
@@ -26,7 +26,7 @@ func main() {
 	}
 	fmt.Printf("Redis Host after config loading: %s\n", c.Redisx.Host)
 	// fmt.Println(c)
-	
+
 	serviceGroup := service.NewServiceGroup()
 	defer serviceGroup.Stop()
 	ctx := svc.NewServiceContext(c)

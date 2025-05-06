@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
-	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
-	"github.com/junhui99/easy-chat/apps/im/ws/ws"
-	"github.com/junhui99/easy-chat/pkg/wuid"
+	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/ws"
+	"github.com/wujunhui99/easy-chat/pkg/wuid"
 )
 
 type Conversation struct {
@@ -25,7 +25,7 @@ func NewConversation(ctx context.Context, srv *websocket.Server, svc *svc.Servic
 	}
 }
 
-func (l *Conversation) Chat(data *ws.Chat, userId string) error{
+func (l *Conversation) Chat(data *ws.Chat, userId string) error {
 	if data.ConversationId == "" {
 		data.ConversationId = wuid.CombineId(userId, data.RecvId)
 	}

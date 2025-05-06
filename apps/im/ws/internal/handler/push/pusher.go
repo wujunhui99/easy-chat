@@ -3,11 +3,11 @@ package push
 import (
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/svc"
-	"github.com/junhui99/easy-chat/apps/im/ws/websocket"
-	"github.com/junhui99/easy-chat/apps/im/ws/ws"
-	"github.com/junhui99/easy-chat/pkg/constants"
 	"github.com/mitchellh/mapstructure"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/websocket"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/ws"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 )
 
 func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
@@ -19,8 +19,8 @@ func Push(svc *svc.ServiceContext) websocket.HandlerFunc {
 			return
 		}
 		fmt.Println("exe push")
-		fmt.Println("recv id",data.RecvId)
-		fmt.Println("msg id",data.MsgId)
+		fmt.Println("recv id", data.RecvId)
+		fmt.Println("msg id", data.MsgId)
 		// 发送的目标
 		switch data.ChatType {
 		case constants.SingleChatType:
@@ -48,9 +48,9 @@ func single(srv *websocket.Server, data *ws.Push, recvId string) error {
 		SendTime:       data.SendTime,
 		Msg: ws.Msg{
 			ReadRecords: data.ReadRecords,
-			MsgId: data.MsgId,
-			MType:   data.MType,
-			Content: data.Content,
+			MsgId:       data.MsgId,
+			MType:       data.MType,
+			Content:     data.Content,
 		},
 	}), rconn)
 

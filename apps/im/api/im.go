@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/im/api/internal/config"
-	"github.com/junhui99/easy-chat/apps/im/api/internal/handler"
-	"github.com/junhui99/easy-chat/apps/im/api/internal/svc"
-	"github.com/junhui99/easy-chat/middleware"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/handler"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/svc"
+	"github.com/wujunhui99/easy-chat/middleware"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

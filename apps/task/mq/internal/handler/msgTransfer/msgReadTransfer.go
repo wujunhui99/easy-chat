@@ -11,11 +11,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/im/ws/ws"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/svc"
-	"github.com/junhui99/easy-chat/apps/task/mq/mq"
-	"github.com/junhui99/easy-chat/pkg/bitmap"
-	"github.com/junhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/ws"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/mq"
+	"github.com/wujunhui99/easy-chat/pkg/bitmap"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 )

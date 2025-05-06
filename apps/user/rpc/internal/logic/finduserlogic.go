@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/jinzhu/copier"
-	"github.com/junhui99/easy-chat/apps/user/models"
-	"github.com/junhui99/easy-chat/apps/user/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/apps/user/models"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

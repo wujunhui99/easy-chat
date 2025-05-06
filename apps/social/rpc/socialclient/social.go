@@ -7,7 +7,7 @@ package socialclient
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/social/rpc/social"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/social"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

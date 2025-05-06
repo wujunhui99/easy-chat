@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/junhui99/easy-chat/apps/task/mq/mq"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/mq"
 	"github.com/zeromicro/go-queue/kq"
 )
 
@@ -26,7 +26,7 @@ func (c *MsgChatTransferClient) Push(msg *mq.MsgChatTransfer) error {
 	if err != nil {
 		return err
 	}
-	return c.pusher.Push(context.Background(),string(body))
+	return c.pusher.Push(context.Background(), string(body))
 }
 
 type MsgReadTransferClient interface {

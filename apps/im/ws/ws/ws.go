@@ -1,6 +1,6 @@
 package ws
 
-import "github.com/junhui99/easy-chat/pkg/constants"
+import "github.com/wujunhui99/easy-chat/pkg/constants"
 
 type (
 	Msg struct {
@@ -29,13 +29,10 @@ type Push struct {
 	RecvIds         []string           `mapstructure:"recvIds"`
 	SendId          string             `mapstructure:"sendId"`
 	constants.MType `mapstructure:"mType"`
-	Content         string            `mapstructure:"content"`
-	ReadRecords     map[string]string `mapstructure:"readRecords"`
-	MsgId       string                `mapstructure:"msgId"`
-	ContentType constants.ContentType `mapstructure:"contentType"`
-
-
-
+	Content         string                `mapstructure:"content"`
+	ReadRecords     map[string]string     `mapstructure:"readRecords"`
+	MsgId           string                `mapstructure:"msgId"`
+	ContentType     constants.ContentType `mapstructure:"contentType"`
 
 	SendTime int64 `mapstructure:"sendTime"`
 }

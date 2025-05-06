@@ -5,12 +5,12 @@ import (
 	"database/sql"
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/apps/social/rpc/social"
-	"github.com/junhui99/easy-chat/apps/social/socialmodels"
-	"github.com/junhui99/easy-chat/pkg/constants"
-	"github.com/junhui99/easy-chat/pkg/xerr"
 	"github.com/pkg/errors"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/social"
+	"github.com/wujunhui99/easy-chat/apps/social/socialmodels"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/pkg/xerr"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

@@ -7,9 +7,9 @@ package server
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/logic"
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/apps/social/rpc/social"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/logic"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/social"
 )
 
 type SocialServer struct {

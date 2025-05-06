@@ -9,7 +9,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/junhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
 )
 
 func TestRegisterLogic_Register(t *testing.T) {

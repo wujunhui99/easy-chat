@@ -3,10 +3,10 @@ package svc
 import (
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/user/models"
-	"github.com/junhui99/easy-chat/apps/user/rpc/internal/config"
-	"github.com/junhui99/easy-chat/pkg/constants"
-	"github.com/junhui99/easy-chat/pkg/ctxdata"
+	"github.com/wujunhui99/easy-chat/apps/user/models"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/internal/config"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )

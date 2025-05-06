@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"github.com/junhui99/easy-chat/apps/user/models"
-	"github.com/junhui99/easy-chat/apps/user/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/apps/user/rpc/user"
-	"github.com/junhui99/easy-chat/pkg/ctxdata"
-	"github.com/junhui99/easy-chat/pkg/encrypt"
-	"github.com/junhui99/easy-chat/pkg/xerr"
 	"github.com/pkg/errors"
+	"github.com/wujunhui99/easy-chat/apps/user/models"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
+	"github.com/wujunhui99/easy-chat/pkg/encrypt"
+	"github.com/wujunhui99/easy-chat/pkg/xerr"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

@@ -20,6 +20,8 @@ type (
         Nickname    string `json:"nickname"`
         Sex         byte   `json:"sex"`
         Avatar      string `json:"avatar"`
+        DeviceType  string `json:"devicetype"`
+        DeviceName  string `json:"devicename"`
     }
     RegisterResp {
         Token   string `json:"token"`
@@ -31,6 +33,8 @@ type (
     LoginReq {
          Phone       string `json:"phone"`
          Password    string `json:"password"`
+         DeviceType  string `json:"devicetype"`
+         DeviceName  string `json:"devicename"`
     }
     LoginResp {
         Token   string `json:"token"`

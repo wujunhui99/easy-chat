@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
-	"github.com/junhui99/easy-chat/apps/user/api/internal/svc"
-	"github.com/junhui99/easy-chat/apps/user/api/internal/types"
-	"github.com/junhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/apps/user/api/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/user/api/internal/types"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

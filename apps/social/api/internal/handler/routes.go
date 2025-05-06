@@ -6,9 +6,9 @@ package handler
 import (
 	"net/http"
 
-	friend "github.com/junhui99/easy-chat/apps/social/api/internal/handler/friend"
-	group "github.com/junhui99/easy-chat/apps/social/api/internal/handler/group"
-	"github.com/junhui99/easy-chat/apps/social/api/internal/svc"
+	friend "github.com/wujunhui99/easy-chat/apps/social/api/internal/handler/friend"
+	group "github.com/wujunhui99/easy-chat/apps/social/api/internal/handler/group"
+	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

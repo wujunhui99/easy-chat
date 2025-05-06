@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/handler/msgTransfer"
-	"github.com/junhui99/easy-chat/apps/task/mq/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/handler/msgTransfer"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/internal/svc"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/service"
 )

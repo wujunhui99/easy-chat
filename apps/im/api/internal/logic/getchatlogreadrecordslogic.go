@@ -3,13 +3,13 @@ package logic
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/im/api/internal/svc"
-	"github.com/junhui99/easy-chat/apps/im/api/internal/types"
-	"github.com/junhui99/easy-chat/apps/im/rpc/im"
-	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
-	"github.com/junhui99/easy-chat/apps/user/rpc/user"
-	"github.com/junhui99/easy-chat/pkg/bitmap"
-	"github.com/junhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/types"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
+	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/pkg/bitmap"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

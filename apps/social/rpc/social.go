@@ -4,11 +4,11 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/config"
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/server"
-	"github.com/junhui99/easy-chat/apps/social/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/apps/social/rpc/social"
-	"github.com/junhui99/easy-chat/pkg/wuid"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/server"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/social"
+	"github.com/wujunhui99/easy-chat/pkg/wuid"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"

@@ -6,8 +6,8 @@ package handler
 import (
 	"net/http"
 
-	user "github.com/junhui99/easy-chat/apps/user/api/internal/handler/user"
-	"github.com/junhui99/easy-chat/apps/user/api/internal/svc"
+	user "github.com/wujunhui99/easy-chat/apps/user/api/internal/handler/user"
+	"github.com/wujunhui99/easy-chat/apps/user/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )

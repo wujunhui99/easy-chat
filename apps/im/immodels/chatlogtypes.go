@@ -3,7 +3,7 @@ package immodels
 import (
 	"time"
 
-	"github.com/junhui99/easy-chat/pkg/constants"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

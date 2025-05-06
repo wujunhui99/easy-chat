@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/im/rpc/im"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
 
-	"github.com/junhui99/easy-chat/apps/im/api/internal/svc"
-	"github.com/junhui99/easy-chat/apps/im/api/internal/types"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

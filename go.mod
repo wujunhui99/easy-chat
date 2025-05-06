@@ -1,4 +1,4 @@
-module github.com/junhui99/easy-chat
+module github.com/wujunhui99/easy-chat
 
 go 1.23.3
 

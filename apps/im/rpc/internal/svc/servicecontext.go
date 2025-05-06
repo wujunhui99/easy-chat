@@ -1,8 +1,8 @@
 package svc
 
 import (
-	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/config"
 )
 
 type ServiceContext struct {

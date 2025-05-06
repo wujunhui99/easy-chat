@@ -1,9 +1,9 @@
 package svc
 
 import (
-	"github.com/junhui99/easy-chat/apps/im/immodels"
-	"github.com/junhui99/easy-chat/apps/im/ws/internal/config"
-	"github.com/junhui99/easy-chat/apps/task/mq/mqclient"
+	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/im/ws/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/task/mq/mqclient"
 )
 
 type ServiceContext struct {
@@ -11,7 +11,6 @@ type ServiceContext struct {
 	immodels.ChatLogModel
 	mqclient.MsgChatTransferClient
 	mqclient.MsgReadTransferClient
-	
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {

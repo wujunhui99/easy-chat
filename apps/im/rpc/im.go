@@ -4,11 +4,11 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/junhui99/easy-chat/apps/im/rpc/im"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/config"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/server"
-	"github.com/junhui99/easy-chat/apps/im/rpc/internal/svc"
-	"github.com/junhui99/easy-chat/pkg/interceptor/rpcserver"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/server"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/internal/svc"
+	"github.com/wujunhui99/easy-chat/pkg/interceptor/rpcserver"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -24,7 +24,7 @@ func main() {
 
 	var c config.Config
 	// conf.MustLoad(*configFile, &c)
-	conf.LoadConfig(*configFile,&c,conf.UseEnv())
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {

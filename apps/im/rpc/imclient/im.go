@@ -7,7 +7,7 @@ package imclient
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/im/rpc/im"
+	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"

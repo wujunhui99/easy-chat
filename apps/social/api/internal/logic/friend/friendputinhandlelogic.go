@@ -3,10 +3,10 @@ package friend
 import (
 	"context"
 
-	"github.com/junhui99/easy-chat/apps/social/api/internal/svc"
-	"github.com/junhui99/easy-chat/apps/social/api/internal/types"
-	"github.com/junhui99/easy-chat/apps/social/rpc/socialclient"
-	"github.com/junhui99/easy-chat/pkg/ctxdata"
+	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
+	"github.com/wujunhui99/easy-chat/apps/social/api/internal/types"
+	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
+	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 

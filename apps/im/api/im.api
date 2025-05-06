@@ -2,8 +2,8 @@ syntax = "v1"
 
 info (
 	title:  "聊天服务的实例对象"
-	author: "xc"
-	email:  "744625709@qq.com"
+	author: "junhui"
+	email:  "344686925@qq.com"
 )
 
 // ------- domain.api --------------------

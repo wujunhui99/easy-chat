@@ -22,3 +22,9 @@ ImRpc:
 
 JwtAuth:
   AccessSecret: imooc.com
+
+
+JwtTable:
+  - Host: ${HOST_IP}:16379
+    Type: node
+    Pass: easy-chat

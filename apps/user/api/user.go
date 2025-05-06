@@ -7,6 +7,7 @@ import (
 	"github.com/junhui99/easy-chat/apps/user/api/internal/config"
 	"github.com/junhui99/easy-chat/apps/user/api/internal/handler"
 	"github.com/junhui99/easy-chat/apps/user/api/internal/svc"
+	"github.com/junhui99/easy-chat/middleware"
 	"github.com/junhui99/easy-chat/pkg/resultx"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -21,7 +22,7 @@ func main() {
 
 	var c config.Config
 	// conf.MustLoad(*configFile, &c)
-	conf.LoadConfig(*configFile,&c,conf.UseEnv())
+	conf.LoadConfig(*configFile, &c, conf.UseEnv())
 	server := rest.MustNewServer(c.RestConf)
 	defer server.Stop()
 
@@ -29,6 +30,9 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 	httpx.SetErrorHandlerCtx(resultx.ErrHandler(c.Name))
 	httpx.SetOkHandler(resultx.OkHandler)
+	tokenRedisCheck := middleware.NewRedisTokenCheckMiddleware(ctx.Redis)
+	server.Use(tokenRedisCheck.Handle)
+
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

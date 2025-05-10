@@ -29,7 +29,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 func (svc *ServiceContext) SetRootToken() error {
 	//生成jwt
 	systemToken, err := ctxdata.GetJwtToken(svc.Config.Jwt.AccessSecret,
-		time.Now().Unix(), 9999999, constants.SYSTEM_ROOT_UID)
+		time.Now().Unix(), 9999999, constants.SYSTEM_ROOT_UID,"desktop")
 	if err != nil {
 		return err
 	}

@@ -4,8 +4,10 @@
 package types
 
 type LoginReq struct {
-	Phone    string `json:"phone"`
-	Password string `json:"password"`
+	Phone      string `json:"phone"`
+	Password   string `json:"password"`
+	DeviceType string `json:"devicetype"`
+	DeviceName string `json:"devicename"`
 }
 
 type LoginResp struct {
@@ -14,11 +16,13 @@ type LoginResp struct {
 }
 
 type RegisterReq struct {
-	Phone    string `json:"phone"`
-	Password string `json:"password"`
-	Nickname string `json:"nickname"`
-	Sex      byte   `json:"sex"`
-	Avatar   string `json:"avatar"`
+	Phone      string `json:"phone"`
+	Password   string `json:"password"`
+	Nickname   string `json:"nickname"`
+	Sex        byte   `json:"sex"`
+	Avatar     string `json:"avatar"`
+	DeviceType string `json:"devicetype"`
+	DeviceName string `json:"devicename"`
 }
 
 type RegisterResp struct {

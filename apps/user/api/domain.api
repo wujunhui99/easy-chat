@@ -48,3 +48,14 @@ type (
         Info User `json:"info"`
     }
 )
+
+type (
+    LogoutReq {
+         Id    string   `json:"id"`
+         DeviceType  string `json:"devicetype"`
+        
+    }
+    LogoutResp {
+        Success int32   `json:"success"`
+    }
+)

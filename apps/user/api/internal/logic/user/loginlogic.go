@@ -29,10 +29,12 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	// todo: add your logic here and delete this line
-
+	fmt.Println("login begin.................")
 	loginResp, err := l.svcCtx.User.Login(l.ctx, &user.LoginReq{
 		Phone:    req.Phone,
 		Password: req.Password,
+		DeviceType: req.DeviceType,
+		DeviceName: req.DeviceName,
 	})
 	if err != nil {
 		return nil, err

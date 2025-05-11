@@ -18,6 +18,6 @@ Telemetry:
 
 
 JwtTable:
-  - Host: ${HOST_IP}:16379
-    Type: node
-    Pass: easy-chat
+  Host: ${HOST_IP}:16379
+  Type: node
+  Pass: easy-chat

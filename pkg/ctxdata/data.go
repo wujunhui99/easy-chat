@@ -13,3 +13,10 @@ func GetUid(ctx context.Context) string {
 	}
 	return ""
 }
+
+func GetDevicetype(ctx context.Context) string {
+	if u, ok := ctx.Value(Deveicetype).(string); ok {
+		return u
+	}
+	return ""
+}

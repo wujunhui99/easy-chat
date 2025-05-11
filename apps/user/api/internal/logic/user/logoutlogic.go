@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jinzhu/copier"
 	"github.com/wujunhui99/easy-chat/apps/user/api/internal/svc"
@@ -11,39 +12,34 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type RegisterLogic struct {
+type LogoutLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-// 用户注册
-func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
-	return &RegisterLogic{
+// 退出登录
+func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogoutLogic {
+	return &LogoutLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
+func (l *LogoutLogic) Logout(req *types.LogoutReq) (resp *types.LogoutResp, err error) {
 	// todo: add your logic here and delete this line
-	registerResp, err := l.svcCtx.User.Register(l.ctx, &user.RegisterReq{
-		Phone:      req.Phone,
-		Nickname:   req.Nickname,
-		Password:   req.Password,
-		Avatar:     req.Avatar,
-		Sex:        int32(req.Sex),
+	logoutResp, err := l.svcCtx.User.Logout(l.ctx, &user.LogoutReq{
+		Id:         req.Id,
 		DeviceType: req.DeviceType,
-		DeviceName: req.DeviceName,
 	})
 	if err != nil {
 		return nil, err
 	}
-
-	var res types.RegisterResp
-	copier.Copy(&res, registerResp)
+	fmt.Println("login")
+	var res types.LogoutResp
+	copier.Copy(&res, logoutResp)
 
 	return &res, nil
-
+	return
 }

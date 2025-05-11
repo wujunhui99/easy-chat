@@ -43,4 +43,20 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/v1/user"),
 	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.JwtParseMiddleware},
+			[]rest.Route{
+				{
+					// 退出登录
+					Method:  http.MethodGet,
+					Path:    "/logout",
+					Handler: user.LogoutHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithPrefix("/v1/user"),
+	)
 }

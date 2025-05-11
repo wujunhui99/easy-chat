@@ -7,7 +7,6 @@ import (
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/config"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/handler"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
-	"github.com/wujunhui99/easy-chat/middleware"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -26,8 +25,6 @@ func main() {
 
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
-	tokenRedisCheck := middleware.NewRedisTokenCheckMiddleware(ctx.Redis)
-	server.Use(tokenRedisCheck.Handle)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()

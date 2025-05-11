@@ -37,3 +37,15 @@ service user {
 	get /user (UserInfoReq) returns (UserInfoResp)
 }
 
+@server (
+	prefix:     v1/user
+	group:      user
+	jwt:        JwtAuth
+	middleware: JwtParseMiddleware
+)
+service user {
+	@doc "退出登录"
+	@handler logout
+	get /logout (LogoutReq) returns (LogoutResp)
+}
+

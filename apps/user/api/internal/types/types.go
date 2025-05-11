@@ -15,6 +15,15 @@ type LoginResp struct {
 	Expire int64  `json:"expire"`
 }
 
+type LogoutReq struct {
+	Id         string `json:"id"`
+	DeviceType string `json:"devicetype"`
+}
+
+type LogoutResp struct {
+	Success int32 `json:"success"`
+}
+
 type RegisterReq struct {
 	Phone      string `json:"phone"`
 	Password   string `json:"password"`

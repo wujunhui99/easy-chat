@@ -6,7 +6,6 @@ import (
 
 	"github.com/wujunhui99/easy-chat/apps/user/rpc/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -26,7 +25,6 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogoutLogi
 
 func (l *LogoutLogic) Logout(in *user.LogoutReq) (*user.LogoutResp, error) {
 	// todo: add your logic here and delete this line
-
 	//删除redis中的token
 	cnt, err := l.svcCtx.Redis.Del(in.Id + ":" + in.DeviceType)
 	if err != nil {

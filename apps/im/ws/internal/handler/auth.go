@@ -48,7 +48,7 @@ func (j *JwtAuth) Auth(w http.ResponseWriter, r *http.Request) bool {
 	}
 
 	*r = *r.WithContext(context.WithValue(r.Context(), ctxdata.Identify, claims[ctxdata.Identify]))
-
+	*r = *r.WithContext(context.WithValue(r.Context(), ctxdata.Deveicetype, claims[ctxdata.Deveicetype]))
 	return true
 
 }

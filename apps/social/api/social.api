@@ -140,9 +140,10 @@ type (
 )
 
 @server (
-	prefix: v1/social
-	group:  friend
-	jwt:    JwtAuth
+	prefix:     v1/social
+	group:      friend
+	jwt:        JwtAuth
+	middleware: JwtParseMiddleware
 )
 service social {
 	@doc "好友申请"
@@ -163,9 +164,10 @@ service social {
 }
 
 @server (
-	prefix: v1/social
-	group:  group
-	jwt:    JwtAuth
+	prefix:     v1/social
+	group:      group
+	jwt:        JwtAuth
+	middleware: JwtParseMiddleware
 )
 service social {
 	@doc "创群"

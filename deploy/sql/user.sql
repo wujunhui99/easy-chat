@@ -1,4 +1,7 @@
-CREATE TABLE `users` (
+CREATE DATABASE IF NOT EXISTS `easy_chat` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `easy_chat`;
+
+CREATE TABLE IF NOT EXISTS `users` (
          `id` varchar(24) COLLATE utf8mb4_unicode_ci  NOT NULL ,
          `avatar` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
          `nickname` varchar(24) COLLATE utf8mb4_unicode_ci NOT NULL,

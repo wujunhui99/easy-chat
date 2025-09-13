@@ -41,7 +41,6 @@ service user {
 	prefix:     v1/user
 	group:      user
 	jwt:        JwtAuth
-	middleware: JwtParseMiddleware
 )
 service user {
 	@doc "退出登录"

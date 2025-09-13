@@ -1,4 +1,7 @@
-CREATE TABLE `wuid`
+CREATE DATABASE IF NOT EXISTS `easy_chat` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `easy_chat`;
+
+CREATE TABLE IF NOT EXISTS `wuid`
 (
     `h` int(10) NOT NULL AUTO_INCREMENT,
     `x` tinyint(4) NOT NULL DEFAULT '0',

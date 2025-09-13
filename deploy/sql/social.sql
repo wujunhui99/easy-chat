@@ -1,4 +1,7 @@
-CREATE TABLE `friends` (
+CREATE DATABASE IF NOT EXISTS `easy_chat` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `easy_chat`;
+
+CREATE TABLE IF NOT EXISTS `friends` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
    `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
    `friend_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
@@ -8,7 +11,7 @@ CREATE TABLE `friends` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `friend_requests` (
+CREATE TABLE IF NOT EXISTS `friend_requests` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
    `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
    `req_uid` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
@@ -20,7 +23,7 @@ CREATE TABLE `friend_requests` (
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `groups` (
  `id` varchar(24) COLLATE utf8mb4_unicode_ci  NOT NULL ,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci  NOT NULL ,
   `icon` varchar(255) COLLATE utf8mb4_unicode_ci  NOT NULL ,
@@ -35,7 +38,7 @@ CREATE TABLE `groups` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `group_members` (
+CREATE TABLE IF NOT EXISTS `group_members` (
  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
  `group_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
  `user_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
@@ -47,7 +50,7 @@ CREATE TABLE `group_members` (
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `group_requests` (
+CREATE TABLE IF NOT EXISTS `group_requests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `req_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,
   `group_id` varchar(64) COLLATE utf8mb4_unicode_ci  NOT NULL ,

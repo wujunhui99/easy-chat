@@ -41,5 +41,4 @@ func (l *LogoutLogic) Logout(req *types.LogoutReq) (resp *types.LogoutResp, err 
 	copier.Copy(&res, logoutResp)
 
 	return &res, nil
-	return
 }

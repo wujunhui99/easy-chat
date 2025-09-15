@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/wujunhui99/easy-chat/apps/social/api/internal/config"
+	"github.com/wujunhui99/easy-chat/apps/im/api/internal/config"
 	"github.com/wujunhui99/easy-chat/pkg/middleware/tokenmatch"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )

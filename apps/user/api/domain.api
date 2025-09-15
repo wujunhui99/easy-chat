@@ -1,61 +1,71 @@
 syntax = "v1"
 
 info (
-    title: "用户服务的实例对象"
-    author: "木兮老师"
+	title:  "用户服务的实例对象"
+	author: "木兮老师"
 )
 
 type User {
-    Id       string `json:"id"`
-    Mobile   string `json:"mobile"`
-    Nickname string `json:"nickname"`
-    Sex      byte   `json:"sex"`
-    Avatar   string `json:"avatar"`
+	Id       string `json:"id"`
+	Phone    string `json:"phone"`
+	Nickname string `json:"nickname"`
+	Sex      byte   `json:"sex"`
+	Avatar   string `json:"avatar"`
 }
 
 type (
-    RegisterReq {
-        Phone       string `json:"phone"`
-        Password    string `json:"password"`
-        Nickname    string `json:"nickname"`
-        Sex         byte   `json:"sex"`
-        Avatar      string `json:"avatar"`
-        DeviceType  string `json:"devicetype"`
-        DeviceName  string `json:"devicename"`
-    }
-    RegisterResp {
-        Token   string `json:"token"`
-        Expire  int64  `json:"expire"`
-    }
+	RegisterReq {
+		Phone      string `json:"phone"`
+		Password   string `json:"password"`
+		Nickname   string `json:"nickname"`
+		Sex        byte   `json:"sex"`
+		Avatar     string `json:"avatar"`
+		DeviceType string `json:"deviceType"`
+		DeviceName string `json:"deviceName"`
+	}
+	RegisterResp {
+		Token  string `json:"token"`
+		Expire int64  `json:"expire"`
+	}
 )
 
 type (
-    LoginReq {
-         Phone       string `json:"phone"`
-         Password    string `json:"password"`
-         DeviceType  string `json:"devicetype"`
-         DeviceName  string `json:"devicename"`
-    }
-    LoginResp {
-        Token   string `json:"token"`
-        Expire  int64  `json:"expire"`
-    }
+	LoginReq {
+		Phone      string `json:"phone"`
+		Password   string `json:"password"`
+		DeviceType string `json:"deviceType"`
+		DeviceName string `json:"deviceName"`
+	}
+	LoginResp {
+		Token  string `json:"token"`
+		Expire int64  `json:"expire"`
+	}
 )
 
 type (
-    UserInfoReq {}
-    UserInfoResp {
-        Info User `json:"info"`
-    }
+	UserInfoReq  {}
+	UserInfoResp {
+		Info User `json:"info"`
+	}
 )
 
 type (
-    LogoutReq {
-         Id    string   `json:"id"`
-         DeviceType  string `json:"devicetype"`
-        
-    }
-    LogoutResp {
-        Success int32   `json:"success"`
-    }
+	LogoutReq {
+		Id         string `json:"id"`
+		DeviceType string `json:"deviceType"`
+	}
+	LogoutResp {
+		Success int32 `json:"success"`
+	}
 )
+
+// 查询用户请求：phone 与 id 二选一；都传优先 phone
+type UserFindReq {
+	phone string `json:"phone,optional"`
+	id    string `json:"id,optional"`
+}
+
+type UserFindResp {
+	user *User `json:"user,omitempty"`
+}
+

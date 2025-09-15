@@ -77,7 +77,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	// 生成token
 	now := time.Now().Unix()
 	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire,
-		userEntity.Id, in.DeviceType)
+		userEntity.Id, in.DeviceType,in.DeviceName)
 	if err != nil {
 		return nil, err
 	}

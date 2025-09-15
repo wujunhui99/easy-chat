@@ -47,8 +47,12 @@ func (j *JwtAuth) Auth(w http.ResponseWriter, r *http.Request) bool {
 		return false
 	}
 
-	*r = *r.WithContext(context.WithValue(r.Context(), ctxdata.Identify, claims[ctxdata.Identify]))
-	*r = *r.WithContext(context.WithValue(r.Context(), ctxdata.Deveicetype, claims[ctxdata.Deveicetype]))
+	// claims 的 key 为 string，需要显式转换。
+	uidVal := claims[string(ctxdata.Identify)]
+	devTypeVal := claims[string(ctxdata.DeveiceType)]
+	ctx := ctxdata.WithUid(r.Context(), fmt.Sprint(uidVal))
+	ctx = ctxdata.WithDeviceType(ctx, fmt.Sprint(devTypeVal))
+	*r = *r.WithContext(ctx)
 	return true
 
 }

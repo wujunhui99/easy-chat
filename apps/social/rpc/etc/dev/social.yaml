@@ -5,7 +5,7 @@ Etcd:
   - ${HOST_IP}:3379
   Key: social.rpc
 Mysql:
-  DataSource: root:easy-chat@tcp(${HOST_IP}:13306)/easy-chat?charset=utf8mb4&parseTime=true
+  DataSource: root:easy-chat@tcp(${HOST_IP}:13306)/easy_chat?charset=utf8mb4&parseTime=true
 
 
 

@@ -1,44 +1,27 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/wujunhui99/easy-chat/apps/user/api/internal/config"
-	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
+	"github.com/wujunhui99/easy-chat/pkg/middleware/tokenmatch"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
-type contextKey string
-
+// JwtParseMiddleware 兼容层：保留原有引用点，内部直接委托给统一的 TokenMatch 中间件。
+// 方便其它服务逐步替换时不需要立即修改所有 wiring。
 type JwtParseMiddleware struct {
-	secret string
-	*redis.Redis
+	delegate *tokenmatch.TokenMatch
 }
 
 func NewJwtParseMiddleware(c config.Config) *JwtParseMiddleware {
-	return &JwtParseMiddleware{secret: c.JwtAuth.AccessSecret,
-		Redis: redis.MustNewRedis(c.JwtTable)}
+	tm := tokenmatch.New(redis.MustNewRedis(c.JwtTable), tokenmatch.Config{
+		AccessSecret:    c.JwtAuth.AccessSecret,
+		AllowEmptyToken: false,
+	})
+	return &JwtParseMiddleware{delegate: tm}
 }
 
 func (m *JwtParseMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		// TODO generate middleware implement function, delete after code implementation
-		uid := ctxdata.GetUid(r.Context())
-		devicetype := ctxdata.GetDevicetype(r.Context())
-		rediskey := uid + ":" + devicetype
-		redistoken, err := m.Redis.Get(rediskey)
-		if err != nil {
-			log.Println("redis get token err ", err)
-			return
-		}
-		token := r.Header.Get("Authorization")
-		if token != redistoken {
-			log.Println("token not match")
-			http.Error(w, "Missing Authorization header", http.StatusUnauthorized)
-			return
-		}
-		// Passthrough to next handler if need
-		next(w, r)
-	}
+	return m.delegate.Handle(next)
 }

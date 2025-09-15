@@ -76,6 +76,25 @@ message LogoutResp {
   int32 success = 1;
 }
 
+message KickDeviceReq {
+  string targetDeviceType = 1; // 目标设备类型 (被踢设备)
+  string callerUid = 2; // 发起者用户ID(显式传递避免跨进程 context 丢失)
+  string callerDeviceType = 3; // 发起者设备类型
+}
+
+message KickDeviceResp {
+  bool success = 1;
+}
+
+// 查询当前账号已登录设备列表
+message GetLoginDevicesReq {
+  string callerUid = 1; // 查询者用户ID
+}
+
+message GetLoginDevicesResp {
+  repeated string devices = 1; // 已登录设备类型列表
+}
+
 service User {
   rpc Ping(Request) returns (Response);
 
@@ -88,4 +107,8 @@ service User {
   rpc FindUser(FindUserReq) returns (FindUserResp);
 
   rpc Logout(LogoutReq) returns (LogoutResp);
+
+  rpc KickDevice(KickDeviceReq) returns (KickDeviceResp);
+
+  rpc GetLoginDevices(GetLoginDevicesReq) returns (GetLoginDevicesResp);
 } 

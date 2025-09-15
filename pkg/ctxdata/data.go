@@ -15,7 +15,7 @@ func GetUid(ctx context.Context) string {
 }
 
 func GetDevicetype(ctx context.Context) string {
-	if u, ok := ctx.Value(Deveicetype).(string); ok {
+	if u, ok := ctx.Value(DeveiceType).(string); ok {
 		return u
 	}
 	return ""

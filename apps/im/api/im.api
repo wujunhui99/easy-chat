@@ -41,8 +41,9 @@ type (
 )
 
 @server (
-	prefix: v1/im
-	jwt:    JwtAuth
+	prefix:     v1/im
+	jwt:        JwtAuth
+	middleware: JwtParse
 )
 service im {
 	@handler getChatLogReadRecords
@@ -78,8 +79,9 @@ type (
 )
 
 @server (
-	prefix: v1/im
-	jwt:    JwtAuth
+	prefix:     v1/im
+	jwt:        JwtAuth
+	middleware: JwtParse
 )
 service im {
 	@doc "根据用户获取聊天记录"

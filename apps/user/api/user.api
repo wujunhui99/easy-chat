@@ -27,24 +27,52 @@ service user {
 
 //need login
 @server (
-	prefix: v1/user
-	group:  user
-	jwt:    JwtAuth
+	prefix:     v1/user
+	group:      user
+	jwt:        JwtAuth
+	middleware: JwtParse
 )
 service user {
 	@doc "获取用户信息"
 	@handler detail
-	get /user (UserInfoReq) returns (UserInfoResp)
+	get /me (UserInfoReq) returns (UserInfoResp)
+
+	@doc "按手机号或ID查询用户(单条)"
+	@handler findUser
+	get /find (UserFindReq) returns (UserFindResp)
+
+	@doc "踢下其它设备(仅主设备mobile)"
+	@handler kickDevice
+	post /kick (KickDeviceReq) returns (KickDeviceResp)
+
+	@doc "获取当前账号已登录设备列表"
+	@handler getLoginDevices
+	get /devices (GetLoginDevicesReq) returns (GetLoginDevicesResp)
 }
 
 @server (
 	prefix:     v1/user
 	group:      user
 	jwt:        JwtAuth
+	middleware: JwtParse
 )
 service user {
 	@doc "退出登录"
 	@handler logout
 	get /logout (LogoutReq) returns (LogoutResp)
+}
+
+type KickDeviceReq {
+	TargetDeviceType string `json:"targetDeviceType"`
+}
+
+type KickDeviceResp {
+	Success bool `json:"success"`
+}
+
+type GetLoginDevicesReq {}
+
+type GetLoginDevicesResp {
+	Devices []string `json:"devices"`
 }
 

@@ -31,8 +31,6 @@ type LoginResp struct {
 }
 
 type LogoutReq struct {
-	Id         string `json:"id"`
-	DeviceType string `json:"deviceType"`
 }
 
 type LogoutResp struct {

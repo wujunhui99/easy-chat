@@ -30,6 +30,6 @@ func main() {
 	httpx.SetErrorHandlerCtx(resultx.ErrHandler(c.Name))
 	httpx.SetOkHandler(resultx.OkHandler)
 
-	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+	fmt.Printf("Starting user api server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }

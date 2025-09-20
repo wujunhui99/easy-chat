@@ -8,10 +8,20 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/redis"
 )
 
-type JwtParseMiddleware struct{ tm *tokenmatch.TokenMatch }
-
-func NewJwtParseMiddleware(c config.Config) *JwtParseMiddleware {
-	return &JwtParseMiddleware{tm: tokenmatch.New(redis.MustNewRedis(c.JwtTable), tokenmatch.Config{})}
+// JwtParseMiddleware 兼容层：保留原有引用点，内部直接委托给统一的 TokenMatch 中间件。
+// 方便其它服务逐步替换时不需要立即修改所有 wiring。
+type JwtParseMiddleware struct {
+	delegate *tokenmatch.TokenMatch
 }
 
-func (m *JwtParseMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc { return m.tm.Handle(next) }
+func NewJwtParseMiddleware(c config.Config) *JwtParseMiddleware {
+	tm := tokenmatch.New(redis.MustNewRedis(c.JwtTable), tokenmatch.Config{
+		AccessSecret:    c.JwtAuth.AccessSecret,
+		AllowEmptyToken: false,
+	})
+	return &JwtParseMiddleware{delegate: tm}
+}
+
+func (m *JwtParseMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc {
+	return m.delegate.Handle(next)
+}

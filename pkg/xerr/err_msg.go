@@ -13,6 +13,7 @@ var codeText = map[int]string{
 	DEVICE_KICKED_ERROR: "当前设备已被其它登录挤下线",
 	INVALID_DEVICE_TYPE: "设备类型非法",
 	NO_PERMISSION:       "当前设备无权限执行该操作",
+	USER_NOT_FOUND:      "用户不存在",
 }
 
 func ErrMsg(errcode int) string {

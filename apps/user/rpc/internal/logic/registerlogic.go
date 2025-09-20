@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"database/sql"
-
 	"time"
 
 	"github.com/pkg/errors"
@@ -11,6 +10,7 @@ import (
 	"github.com/wujunhui99/easy-chat/apps/user/models"
 	"github.com/wujunhui99/easy-chat/apps/user/rpc/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/user/rpc/user"
+	"github.com/wujunhui99/easy-chat/pkg/constants"
 	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
 	"github.com/wujunhui99/easy-chat/pkg/encrypt"
 	"github.com/wujunhui99/easy-chat/pkg/wuid"
@@ -26,7 +26,8 @@ type RegisterLogic struct {
 }
 
 var (
-	ErrPhoneIsRegister = errors.New("手机号已经注册过")
+	ErrPhoneIsRegister   = errors.New("手机号已经注册过")
+	ErrDeviceTypeInvalid = errors.New("设备类型不合法")
 )
 
 func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
@@ -38,7 +39,10 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, error) {
-	// todo: add your logic here and delete this line
+	// 设备合法性校验
+	if !constants.IsAllowedDevice(in.DeviceType) {
+		return nil, ErrDeviceTypeInvalid
+	}
 	userEntity, err := l.svcCtx.UsersModel.FindByPhone(l.ctx, in.Phone)
 	if err != nil && err != models.ErrNotFound {
 		return nil, err
@@ -77,7 +81,7 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 	// 生成token
 	now := time.Now().Unix()
 	token, err := ctxdata.GetJwtToken(l.svcCtx.Config.Jwt.AccessSecret, now, l.svcCtx.Config.Jwt.AccessExpire,
-		userEntity.Id, in.DeviceType,in.DeviceName)
+		userEntity.Id, in.DeviceType, in.DeviceName)
 	if err != nil {
 		return nil, err
 	}

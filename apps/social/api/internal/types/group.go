@@ -9,6 +9,7 @@ type GroupCreateReq struct {
 }
 
 type GroupCreateResp struct {
+	GroupId string `json:"group_id,omitempty"`
 }
 
 type GroupListRep struct {
@@ -40,9 +41,21 @@ type GroupPutInRep struct {
 	ReqMsg     string `json:"req_msg,omitempty"`
 	ReqTime    int64  `json:"req_time,omitempty"`
 	JoinSource int64  `json:"join_source,omitempty"`
+	InviterUid string `json:"inviter_uid,optional"` // 邀请入群时必填
 }
 
 type GroupPutInResp struct {
+}
+
+type GroupUpdateReq struct {
+	GroupId    string   `json:"group_id"`           // 必填
+	Name       string   `json:"name,optional"`      // 可选
+	Icon       string   `json:"icon,optional"`      // 可选
+	IsVerify   bool     `json:"is_verify,optional"` // 可选
+	UpdateMask []string `json:"update_mask"`        // 必填：要更新的字段列表，如 ["name","icon","is_verify"]
+}
+
+type GroupUpdateResp struct {
 }
 
 type GroupUserListReq struct {
@@ -51,4 +64,11 @@ type GroupUserListReq struct {
 
 type GroupUserListResp struct {
 	List []*GroupMembers `json:"List,omitempty"`
+}
+
+type MyCreatedGroupsReq struct {
+}
+
+type MyCreatedGroupsResp struct {
+	List []*Groups `json:"list,omitempty"`
 }

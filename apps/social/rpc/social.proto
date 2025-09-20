@@ -32,6 +32,7 @@ message Groups {
   bool   isVerify = 7;
   string notification = 8; // 公告通知
   string notificationUid = 9;
+  int64  createdAt = 10;
 }
 
 message GroupMembers {
@@ -75,7 +76,8 @@ message FriendPutInHandleReq {
 message FriendPutInHandleResp {}
 
 message FriendPutInListReq{
-  string userId = 1;
+  string userId = 1;        // 请求人自己（保持原有字段，可能某些场景需要）
+  int32  direction = 2;     // 1=收到的(别人加我 user_id=me) 2=发出的(我加别人 req_uid=me) 默认1
 }
 
 message FriendPutInListResp{
@@ -90,6 +92,13 @@ message FriendListResp{
   repeated Friends list = 1;
 }
 
+// 删除好友
+message FriendDeleteReq {
+  string userId = 1;     // 发起删除者
+  string friendUid = 2;  // 要删除的好友uid
+}
+message FriendDeleteResp {}
+
 // 群
 message GroupCreateReq {
   string name = 2;
@@ -98,7 +107,7 @@ message GroupCreateReq {
   string creator_uid = 5;
 }
 message GroupCreateResp {
-  string id = 1;
+  string Id = 1;
 }
 
 message GroupPutinReq {
@@ -115,6 +124,7 @@ message GroupPutinResp {
 
 message GroupPutinListReq {
   string groupId = 1;
+  string operatorUid = 2; // 操作者（用于权限校验：必须是群主或管理员）
 }
 message GroupPutinListResp {
   repeated GroupRequests list = 1;
@@ -147,6 +157,32 @@ message GroupUsersResp {
   repeated GroupMembers List = 1;
 }
 
+message MyCreatedGroupsReq {
+  string userId = 1;
+}
+message MyCreatedGroupsResp {
+  repeated Groups list = 1;
+}
+
+message MutualFriendCountReq {
+  string userId = 1;
+  string otherId = 2;
+}
+message MutualFriendCountResp {
+  int64 count = 1;
+}
+
+// 更新群信息（部分字段，通过 updateMask 控制）
+message GroupUpdateReq {
+  string groupId = 1;
+  string name = 2;
+  string icon = 3;
+  bool   isVerify = 4;
+  repeated string updateMask = 5; // 允许的取值："name","icon","is_verify"
+  string operatorUid = 6;         // 执行更新的操作者（API 从 JWT 注入）
+}
+message GroupUpdateResp {}
+
 
 // svc
 service social {
@@ -156,6 +192,7 @@ service social {
   rpc FriendPutInHandle(FriendPutInHandleReq) returns(FriendPutInHandleResp);
   rpc FriendPutInList(FriendPutInListReq) returns(FriendPutInListResp);
   rpc FriendList(FriendListReq) returns (FriendListResp);
+  rpc FriendDelete(FriendDeleteReq) returns (FriendDeleteResp);
 
   // 群业务：创建群，修改群，群公告，申请群，用户群列表，群成员，申请群，群退出..
 
@@ -165,6 +202,12 @@ service social {
   rpc GroupPutInHandle(GroupPutInHandleReq) returns(GroupPutInHandleResp);
   rpc GroupList(GroupListReq) returns (GroupListResp);
   rpc GroupUsers(GroupUsersReq) returns (GroupUsersResp);
+  rpc MyCreatedGroups(MyCreatedGroupsReq) returns (MyCreatedGroupsResp);
+  // 共同好友数量（Redis 求交集）
+  rpc MutualFriendCount(MutualFriendCountReq) returns (MutualFriendCountResp);
+
+  // 更新群信息（带字段掩码）
+  rpc GroupUpdate(GroupUpdateReq) returns (GroupUpdateResp);
 
   // ..
 }

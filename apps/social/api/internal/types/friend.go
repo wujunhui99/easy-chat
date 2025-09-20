@@ -3,6 +3,13 @@
 
 package types
 
+type FriendDeleteReq struct {
+	FriendUid string `json:"friend_uid"`
+}
+
+type FriendDeleteResp struct {
+}
+
 type FriendListReq struct {
 }
 
@@ -19,6 +26,7 @@ type FriendPutInHandleResp struct {
 }
 
 type FriendPutInListReq struct {
+	Direction int32 `json:"direction,optional"` // 1=收到的(别人加我 user_id=我) 2=我发出的(我加别人 req_uid=我) 默认1
 }
 
 type FriendPutInListResp struct {
@@ -32,4 +40,12 @@ type FriendPutInReq struct {
 }
 
 type FriendPutInResp struct {
+}
+
+type MutualFriendCountReq struct {
+	OtherId string `json:"other_id"`
+}
+
+type MutualFriendCountResp struct {
+	Count int64 `json:"count"`
 }

@@ -19,6 +19,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			[]rest.Middleware{serverCtx.JwtParse},
 			[]rest.Route{
 				{
+					// 删除好友
+					Method:  http.MethodDelete,
+					Path:    "/friend",
+					Handler: friend.FriendDeleteHandler(serverCtx),
+				},
+				{
+					// 共同好友数量（Redis 求交集）
+					Method:  http.MethodGet,
+					Path:    "/friend/mutual",
+					Handler: friend.MutualFriendCountHandler(serverCtx),
+				},
+				{
 					// 好友申请
 					Method:  http.MethodPost,
 					Path:    "/friend/putIn",
@@ -31,7 +43,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Handler: friend.FriendPutInHandleHandler(serverCtx),
 				},
 				{
-					// 好友申请列表
+					// 好友申请列表 direction=1 收到的 | 2 发出的
 					Method:  http.MethodGet,
 					Path:    "/friend/putIns",
 					Handler: friend.FriendPutInListHandler(serverCtx),
@@ -57,6 +69,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodPost,
 					Path:    "/group",
 					Handler: group.CreateGroupHandler(serverCtx),
+				},
+				{
+					// 更新群信息（带 update_mask）
+					Method:  http.MethodPatch,
+					Path:    "/group",
+					Handler: group.GroupUpdateHandler(serverCtx),
 				},
 				{
 					// 申请进群
@@ -87,6 +105,12 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 					Method:  http.MethodGet,
 					Path:    "/groups",
 					Handler: group.GroupListHandler(serverCtx),
+				},
+				{
+					// 我创建的群列表
+					Method:  http.MethodGet,
+					Path:    "/groups/myCreated",
+					Handler: group.MyCreatedGroupsHandler(serverCtx),
 				},
 			}...,
 		),

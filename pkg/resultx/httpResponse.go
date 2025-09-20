@@ -61,6 +61,15 @@ func ErrHandler(name string) func(ctx context.Context, err error) (int, any) {
 		// 日志记录
 		logx.WithContext(ctx).Errorf("【%s】 err %v", name, err)
 
-		return http.StatusBadRequest, Fail(errcode, errmsg)
+		// HTTP 状态码映射
+		httpStatus := http.StatusBadRequest
+		switch errcode {
+		case xerr.UNAUTHORIZED_ERROR:
+			httpStatus = http.StatusUnauthorized // 401
+		case xerr.NO_PERMISSION:
+			httpStatus = http.StatusForbidden // 403
+		}
+
+		return httpStatus, Fail(errcode, errmsg)
 	}
 }

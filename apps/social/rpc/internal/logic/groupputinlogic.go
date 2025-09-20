@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"database/sql"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -117,15 +118,24 @@ func (l *GroupPutinLogic) GroupPutin(in *social.GroupPutinReq) (*social.GroupPut
 		return l.createGroupReq(groupReq, false)
 	}
 
+	// 邀请场景：如果未提供 inviterUid，或邀请人不是群成员/非管理者，则按“申请待审核”处理
+	if strings.TrimSpace(in.InviterUid) == "" {
+		return l.createGroupReq(groupReq, false)
+	}
+
 	inviteGroupMember, err = l.svcCtx.GroupMembersModel.FindByGroudIdAndUserId(l.ctx, in.InviterUid, in.GroupId)
-	if err != nil {
+	if err != nil && err != socialmodels.ErrNotFound {
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find group member by groud id and user id err %v, req %v",
 			in.InviterUid, in.GroupId)
 	}
+	if err == socialmodels.ErrNotFound || inviteGroupMember == nil {
+		// 邀请人不是群成员：走申请待审核
+		return l.createGroupReq(groupReq, false)
+	}
 
-	if constants.GroupRoleLevel(inviteGroupMember.RoleLevel) == constants.CreatorGroupRoleLevel || constants.
-		GroupRoleLevel(inviteGroupMember.RoleLevel) == constants.ManagerGroupRoleLevel {
-		// 是管理者或创建者邀请
+	if constants.GroupRoleLevel(inviteGroupMember.RoleLevel) == constants.CreatorGroupRoleLevel ||
+		constants.GroupRoleLevel(inviteGroupMember.RoleLevel) == constants.ManagerGroupRoleLevel {
+		// 管理者或创建者邀请：直接通过
 		defer createGroupMember()
 
 		groupReq.HandleResult = sql.NullInt64{
@@ -138,6 +148,7 @@ func (l *GroupPutinLogic) GroupPutin(in *social.GroupPutinReq) (*social.GroupPut
 		}
 		return l.createGroupReq(groupReq, true)
 	}
+	// 其他成员邀请：申请待审核
 	return l.createGroupReq(groupReq, false)
 
 }
@@ -160,7 +171,7 @@ func (l *GroupPutinLogic) createGroupMember(in *social.GroupPutinReq) error {
 	groupMember := &socialmodels.GroupMembers{
 		GroupId:     in.GroupId,
 		UserId:      in.ReqId,
-		RoleLevel:   int(constants.AtLargeGroupRoleLevel),
+		RoleLevel:   int64(constants.AtLargeGroupRoleLevel),
 		OperatorUid: in.InviterUid,
 	}
 	_, err := l.svcCtx.GroupMembersModel.Insert(l.ctx, nil, groupMember)

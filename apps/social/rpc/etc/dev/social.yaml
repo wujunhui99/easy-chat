@@ -2,17 +2,17 @@ Name: social.rpc
 ListenOn: 0.0.0.0:10001
 Etcd:
   Hosts:
-  - ${HOST_IP}:3379
+    - ${HOST_IP}:3379
   Key: social.rpc
 Mysql:
-  DataSource: root:easy-chat@tcp(${HOST_IP}:13306)/easy_chat?charset=utf8mb4&parseTime=true
-
-
+  DataSource: root:easy-chat@tcp(${HOST_IP}:13306)/easy_chat?charset=utf8mb4&parseTime=true&loc=Local
 
 Cache:
   - Host: ${HOST_IP}:16379
     Type: node
     Pass: easy-chat
 
-
-  
+Redisx:
+  Host: ${HOST_IP}:16379
+  Type: node
+  Pass: easy-chat

@@ -31,6 +31,7 @@ type (
 		IsVerify        bool   `json:"is_verify,omitempty"`
 		Notification    string `json:"notification,omitempty"`
 		NotificationUid string `json:"notification_uid,omitempty"`
+		CreatedAt       int64  `json:"created_at,omitempty"`
 	}
 	GroupMembers {
 		Id            int64  `json:"id,omitempty"`
@@ -56,6 +57,28 @@ type (
 	}
 )
 
+// ---- Group Update (partial update via update_mask) ----
+type (
+	GroupUpdateReq {
+		GroupId    string   `json:"group_id"` // 必填
+		Name       string   `json:"name,optional"` // 可选
+		Icon       string   `json:"icon,optional"` // 可选
+		IsVerify   bool     `json:"is_verify,optional"` // 可选
+		UpdateMask []string `json:"update_mask"` // 必填：要更新的字段列表，如 ["name","icon","is_verify"]
+	}
+	GroupUpdateResp  {}
+)
+
+type (
+	// 共同好友数量（仅传对端，自己从 token 获取）
+	MutualFriendCountReq {
+		OtherId string `json:"other_id"`
+	}
+	MutualFriendCountResp {
+		Count int64 `json:"count"`
+	}
+)
+
 type (
 	FriendPutInReq {
 		ReqMsg  string `json:"req_msg,omitempty"`
@@ -74,7 +97,9 @@ type (
 )
 
 type (
-	FriendPutInListReq  {}
+	FriendPutInListReq {
+		Direction int32 `json:"direction,optional"` // 1=收到的(别人加我 user_id=我) 2=我发出的(我加别人 req_uid=我) 默认1
+	}
 	FriendPutInListResp {
 		List []*FriendRequests `json:"list"`
 	}
@@ -88,11 +113,21 @@ type (
 )
 
 type (
+	// 删除好友请求：传好友用户ID
+	FriendDeleteReq {
+		FriendUid string `json:"friend_uid"`
+	}
+	FriendDeleteResp  {}
+)
+
+type (
 	GroupCreateReq {
 		Name string `json:"name,omitempty"`
 		Icon string `json:"icon,omitempty"`
 	}
-	GroupCreateResp  {}
+	GroupCreateResp {
+		GroupId string `json:"group_id,omitempty"`
+	}
 )
 
 type (
@@ -101,6 +136,7 @@ type (
 		ReqMsg     string `json:"req_msg,omitempty"`
 		ReqTime    int64  `json:"req_time,omitempty"`
 		JoinSource int64  `json:"join_source,omitempty"`
+		InviterUid string `json:"inviter_uid,optional"` // 邀请入群时必填
 	}
 	GroupPutInResp  {}
 )
@@ -131,6 +167,13 @@ type (
 )
 
 type (
+	MyCreatedGroupsReq  {}
+	MyCreatedGroupsResp {
+		List []*Groups `json:"list,omitempty"`
+	}
+)
+
+type (
 	GroupUserListReq {
 		GroupId string `json:"group_id,omitempty"`
 	}
@@ -154,13 +197,21 @@ service social {
 	@handler friendPutInHandle
 	put /friend/putIn (FriendPutInHandleReq) returns (FriendPutInHandleResp)
 
-	@doc "好友申请列表"
+	@doc "好友申请列表 direction=1 收到的 | 2 发出的"
 	@handler friendPutInList
 	get /friend/putIns (FriendPutInListReq) returns (FriendPutInListResp)
 
 	@doc "好友列表"
 	@handler friendList
 	get /friends (FriendListReq) returns (FriendListResp)
+
+	@doc "删除好友"
+	@handler friendDelete
+	delete /friend (FriendDeleteReq) returns (FriendDeleteResp)
+
+	@doc "共同好友数量（Redis 求交集）"
+	@handler mutualFriendCount
+	get /friend/mutual (MutualFriendCountReq) returns (MutualFriendCountResp)
 }
 
 @server (
@@ -186,12 +237,20 @@ service social {
 	@handler groupPutInList
 	get /group/putIns (GroupPutInListRep) returns (GroupPutInListResp)
 
-	@doc "用户申群列表"
+	@doc "用户群列表"
 	@handler groupList
 	get /groups (GroupListRep) returns (GroupListResp)
+
+	@doc "我创建的群列表"
+	@handler myCreatedGroups
+	get /groups/myCreated (MyCreatedGroupsReq) returns (MyCreatedGroupsResp)
 
 	@doc "成员列表列表"
 	@handler groupUserList
 	get /group/users (GroupUserListReq) returns (GroupUserListResp)
+
+	@doc "更新群信息（带 update_mask）"
+	@handler groupUpdate
+	patch /group (GroupUpdateReq) returns (GroupUpdateResp)
 }
 

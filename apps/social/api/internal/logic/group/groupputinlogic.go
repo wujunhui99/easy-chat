@@ -39,7 +39,8 @@ func (l *GroupPutInLogic) GroupPutIn(req *types.GroupPutInRep) (resp *types.Grou
 	})
 
 	if res.GroupId == "" {
-		return nil, err
+		// 说明是“申请中/待审核”场景（未直接入群），返回空对象即可，避免 (nil,nil) 或误报错
+		return &types.GroupPutInResp{}, err
 	}
 	// 创建进入群的用户和群的会话
 	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &imclient.SetUpUserConversationReq{

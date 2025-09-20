@@ -93,7 +93,7 @@ func (t *TokenMatch) Handle(next http.HandlerFunc) http.HandlerFunc {
 		ctx = ctxdata.WithDeviceType(ctx, devType)
 		ctx = ctxdata.WithRawToken(ctx, tokenStr)
 		r = r.WithContext(ctx)
-		fmt.Printf("uid is %s \n",uid);
+		fmt.Printf("uid is %s \n", uid)
 		fmt.Printf("ctx uid is %s \n", ctx.Value("uid"))
 
 		next(w, r)

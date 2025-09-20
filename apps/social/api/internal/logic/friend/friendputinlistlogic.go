@@ -26,17 +26,25 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FriendPutInListLogic) FriendPutInList(req *types.FriendPutInListReq) (resp *types.FriendPutInListResp, err error) {
-	// todo: add your logic here and delete this line
+	uid := ctxdata.GetUid(l.ctx)
+
+	direction := req.Direction
+	if direction != 2 { // 只认 2，其余归1
+		direction = 1
+	}
 
 	list, err := l.svcCtx.Social.FriendPutInList(l.ctx, &socialclient.FriendPutInListReq{
-		UserId: ctxdata.GetUid(l.ctx),
+		UserId:    uid,
+		Direction: direction,
 	})
 	if err != nil {
 		return nil, err
 	}
 
 	var respList []*types.FriendRequests
-	copier.Copy(&respList, list.List)
+	if len(list.List) > 0 {
+		copier.Copy(&respList, list.List)
+	}
 
 	return &types.FriendPutInListResp{List: respList}, nil
 }

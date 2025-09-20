@@ -54,4 +54,5 @@ type Groups struct {
 	IsVerify        bool   `json:"is_verify,omitempty"`
 	Notification    string `json:"notification,omitempty"`
 	NotificationUid string `json:"notification_uid,omitempty"`
+	CreatedAt       int64  `json:"created_at,omitempty"`
 }

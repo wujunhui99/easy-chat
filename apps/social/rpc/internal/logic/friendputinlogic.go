@@ -29,44 +29,43 @@ func NewFriendPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Frien
 }
 
 func (l *FriendPutInLogic) FriendPutIn(in *social.FriendPutInReq) (*social.FriendPutInResp, error) {
-	// todo: add your logic here and delete this line
+	// 语义明确：in.UserId = target(被申请人) , in.ReqUid = requester(申请人)
+	target := in.UserId
+	requester := in.ReqUid
 
-	// 申请人是否与目标是好友关系
-	friends, err := l.svcCtx.FriendsModel.FindByUidAndFid(l.ctx, in.UserId, in.ReqUid)
+	// 不能加自己
+	if target == requester {
+		return &social.FriendPutInResp{}, nil
+	}
+
+	// 是否已经是好友（requester -> target）
+	friends, err := l.svcCtx.FriendsModel.FindByUidAndFid(l.ctx, requester, target)
 	if err != nil && err != socialmodels.ErrNotFound {
-		return nil, errors.Wrapf(xerr.NewDBErr(), "find friends by uid and fid err %v req %v ", err, in)
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find friends requester=%s target=%s err %v", requester, target, err)
 	}
-	if friends != nil {
-		return &social.FriendPutInResp{}, err
+	if friends != nil { // 已是好友直接返回幂等
+		return &social.FriendPutInResp{}, nil
 	}
 
-	// 是否已经有过申请，申请是不成功，没有完成
-	friendReqs, err := l.svcCtx.FriendRequestsModel.FindByReqUidAndUserId(l.ctx, in.ReqUid, in.UserId)
+	// 申请记录是否已存在（同一对）
+	friendReqs, err := l.svcCtx.FriendRequestsModel.FindByReqUidAndUserId(l.ctx, requester, target)
 	if err != nil && err != socialmodels.ErrNotFound {
-		return nil, errors.Wrapf(xerr.NewDBErr(), "find friendsRequest by rid and uid err %v req %v ", err, in)
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find friendRequest requester=%s target=%s err %v", requester, target, err)
 	}
-	if friendReqs != nil {
-		return &social.FriendPutInResp{}, err
+	if friendReqs != nil { // 已存在未处理或正在处理中
+		return &social.FriendPutInResp{}, nil
 	}
 
-	// 创建申请记录
+	// 插入申请
 	_, err = l.svcCtx.FriendRequestsModel.Insert(l.ctx, &socialmodels.FriendRequests{
-		UserId: in.UserId,
-		ReqUid: in.ReqUid,
-		ReqMsg: sql.NullString{
-			Valid:  true,
-			String: in.ReqMsg,
-		},
-		ReqTime: time.Unix(in.ReqTime, 0),
-		HandleResult: sql.NullInt64{
-			Int64: int64(constants.NoHandlerResult),
-			Valid: true,
-		},
+		UserId:       target, // 被申请人
+		ReqUid:       requester,
+		ReqMsg:       sql.NullString{Valid: len(in.ReqMsg) > 0, String: in.ReqMsg},
+		ReqTime:      time.Unix(in.ReqTime, 0),
+		HandleResult: sql.NullInt64{Int64: int64(constants.NoHandlerResult), Valid: true},
 	})
-
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewDBErr(), "insert friendRequest err %v req %v ", err, in)
+		return nil, errors.Wrapf(xerr.NewDBErr(), "insert friendRequest requester=%s target=%s err %v", requester, target, err)
 	}
-
 	return &social.FriendPutInResp{}, nil
 }

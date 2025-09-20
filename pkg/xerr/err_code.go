@@ -13,4 +13,5 @@ const (
 	DEVICE_KICKED_ERROR = 100005 // 设备被踢下线
 	INVALID_DEVICE_TYPE = 100006 // 非法设备类型
 	NO_PERMISSION       = 100007 // 无权限操作
+	USER_NOT_FOUND      = 100101 // 用户不存在/未注册
 )

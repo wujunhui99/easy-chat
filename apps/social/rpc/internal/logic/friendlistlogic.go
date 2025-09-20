@@ -34,8 +34,16 @@ func (l *FriendListLogic) FriendList(in *social.FriendListReq) (*social.FriendLi
 			in.UserId)
 	}
 
+	// 仅返回 status=0 的正常好友
 	var respList []*social.Friends
-	copier.Copy(&respList, &friendsList)
+	for _, f := range friendsList {
+		if f.Status != 0 { // 过滤已删除、拉黑、免打扰
+			continue
+		}
+		var item social.Friends
+		_ = copier.Copy(&item, f)
+		respList = append(respList, &item)
+	}
 
 	return &social.FriendListResp{
 		List: respList,

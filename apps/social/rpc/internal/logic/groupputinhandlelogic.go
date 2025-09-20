@@ -41,6 +41,20 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(in *social.GroupPutInHandleReq)
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find friend req err %v req %v", err, in.GroupReqId)
 	}
 
+	// 权限校验：仅管理员或群主可处理
+	mem, err := l.svcCtx.GroupMembersModel.FindByGroudIdAndUserId(l.ctx, in.HandleUid, in.GroupId)
+	if err == socialmodels.ErrNotFound {
+		// 非群成员：统一返回无权限，避免泄露成员信息
+		return nil, errors.WithStack(xerr.New(xerr.NO_PERMISSION, "仅群主或管理员可处理入群申请"))
+	}
+	if err != nil {
+		return nil, errors.Wrapf(xerr.NewDBErr(), "find group member gid=%s uid=%s err: %v", in.GroupId, in.HandleUid, err)
+	}
+	role := constants.GroupRoleLevel(mem.RoleLevel)
+	if !(role == constants.CreatorGroupRoleLevel || role == constants.ManagerGroupRoleLevel) {
+		return nil, errors.WithStack(xerr.New(xerr.NO_PERMISSION, "仅群主或管理员可处理入群申请"))
+	}
+
 	switch constants.HandlerResult(groupReq.HandleResult.Int64) {
 	case constants.PassHandlerResult:
 		return nil, errors.WithStack(ErrGroupReqBeforePass)
@@ -65,7 +79,7 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(in *social.GroupPutInHandleReq)
 		groupMember := &socialmodels.GroupMembers{
 			GroupId:     groupReq.GroupId,
 			UserId:      groupReq.ReqId,
-			RoleLevel:   int(constants.AtLargeGroupRoleLevel),
+			RoleLevel:   int64(constants.AtLargeGroupRoleLevel),
 			OperatorUid: in.HandleUid,
 		}
 		_, err = l.svcCtx.GroupMembersModel.Insert(l.ctx, session, groupMember)

@@ -3,11 +3,14 @@ package group
 import (
 	"context"
 
+	"github.com/pkg/errors"
+
 	"github.com/wujunhui99/easy-chat/apps/im/rpc/imclient"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
 	"github.com/wujunhui99/easy-chat/pkg/ctxdata"
+	"github.com/wujunhui99/easy-chat/pkg/xerr"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -48,5 +51,11 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.G
 		CreateId: uid,
 	})
 
-	return
+	if err != nil {
+		return nil, errors.WithStack(xerr.New(xerr.SERVER_COMMON_ERROR, "CreateGroupConversation failed"))
+	}
+
+	return &types.GroupCreateResp{
+		GroupId: res.Id,
+	}, nil
 }

@@ -50,10 +50,8 @@ type (
 )
 
 type (
-	LogoutReq {
-		Id         string `json:"id"`
-		DeviceType string `json:"deviceType"`
-	}
+	// LogoutReq 现在无需参数，依靠 JWT 中解析出的 uid 与 deviceType
+	LogoutReq {}
 	LogoutResp {
 		Success int32 `json:"success"`
 	}

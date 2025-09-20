@@ -35,6 +35,9 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(req *types.GroupPutInHandleRep)
 		HandleUid:    uid,
 		HandleResult: req.HandleResult,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	if constants.HandlerResult(req.HandleResult) != constants.PassHandlerResult {
 		return
@@ -42,7 +45,7 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(req *types.GroupPutInHandleRep)
 
 	// todo: 通过后的业务
 	if res.GroupId == "" {
-		return nil, err
+		return nil, nil
 	}
 	// 创建进入群的用户和群的会话
 	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &imclient.SetUpUserConversationReq{

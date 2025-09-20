@@ -24,16 +24,15 @@ func NewLogoutLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LogoutLogi
 }
 
 func (l *LogoutLogic) Logout(in *user.LogoutReq) (*user.LogoutResp, error) {
-	// todo: add your logic here and delete this line
-	//删除redis中的token
+	if in.Id == "" || in.DeviceType == "" {
+		return nil, errors.New("缺少必需字段")
+	}
 	cnt, err := l.svcCtx.Redis.Del(in.Id + ":" + in.DeviceType)
 	if err != nil {
 		return nil, err
 	}
 	if cnt == 0 {
-		return nil, errors.New("删除失败")
+		return nil, errors.New("未找到登录状态")
 	}
-	return &user.LogoutResp{
-		Success: 1,
-	}, nil
+	return &user.LogoutResp{Success: 1}, nil
 }

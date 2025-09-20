@@ -51,7 +51,7 @@ func (l *GroupCreateLogic) GroupCreate(in *social.GroupCreateReq) (*social.Group
 		_, err = l.svcCtx.GroupMembersModel.Insert(l.ctx, session, &socialmodels.GroupMembers{
 			GroupId:   groups.Id,
 			UserId:    in.CreatorUid,
-			RoleLevel: int(constants.CreatorGroupRoleLevel),
+			RoleLevel: int64(constants.CreatorGroupRoleLevel),
 		})
 		if err != nil {
 			return errors.Wrapf(xerr.NewDBErr(), "insert group member err %v req %v", err, in)

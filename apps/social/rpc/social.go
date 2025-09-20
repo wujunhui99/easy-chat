@@ -8,6 +8,7 @@ import (
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/server"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/social"
+	"github.com/wujunhui99/easy-chat/pkg/interceptor/rpcserver"
 	"github.com/wujunhui99/easy-chat/pkg/wuid"
 
 	"github.com/zeromicro/go-zero/core/conf"
@@ -34,8 +35,9 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
+	s.AddUnaryInterceptors(rpcserver.LogInterceptor)
 	defer s.Stop()
 
-	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
+	fmt.Printf("Starting social rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }

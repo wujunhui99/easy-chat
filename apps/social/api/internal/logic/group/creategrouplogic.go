@@ -5,7 +5,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/wujunhui99/easy-chat/apps/im/rpc/imclient"
+	"github.com/wujunhui99/easy-chat/apps/chat/rpc/chatclient"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
@@ -46,7 +46,7 @@ func (l *CreateGroupLogic) CreateGroup(req *types.GroupCreateReq) (resp *types.G
 		return nil, err
 	}
 
-	_, err = l.svcCtx.Im.CreateGroupConversation(l.ctx, &imclient.CreateGroupConversationReq{
+	_, err = l.svcCtx.Chat.CreateGroupConversation(l.ctx, &chatclient.CreateGroupConversationReq{
 		GroupId:  res.Id,
 		CreateId: uid,
 	})

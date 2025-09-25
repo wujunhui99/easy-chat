@@ -23,6 +23,6 @@ Jwt:
   AccessExpire: 8640000
 
 Telemetry:
- Name: im.rpc
+ Name: chat.rpc
  Endpoint: http://${HOST_IP}:14268/api/traces
  Batcher: jaeger

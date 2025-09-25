@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/chat/chatmodels"
 
 	"github.com/wujunhui99/easy-chat/apps/msg/msgtransfer/msgtransfer"
 	"github.com/wujunhui99/easy-chat/apps/msg/msggateway/msggateway"
@@ -58,7 +58,7 @@ func (m *MsgChatTransfer) Consume(ctx context.Context, key, value string) error 
 
 func (m *MsgChatTransfer) addChatLog(ctx context.Context, msgId primitive.ObjectID, data *msgtransfer.MsgChatTransfer) error {
 	//记录消息
-	chatLog := immodels.ChatLog{
+	chatLog := chatmodels.ChatLog{
 		ID:             msgId,
 		ConversationId: data.ConversationId,
 		SendId:         data.SendId,

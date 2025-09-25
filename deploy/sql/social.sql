@@ -73,4 +73,4 @@ CREATE TABLE IF NOT EXISTS `group_requests` (
    `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
--- goctl model mysql ddl -src="./deploy/sql/social.sql" -dir="./apps/social/socialmodels" -c
+-- goctl model mysql ddl -src="./deploy/sql/social.sql" -dir="./apps/social/socialmodels" -c -style gozero

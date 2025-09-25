@@ -3,7 +3,7 @@ package group
 import (
 	"context"
 
-	"github.com/wujunhui99/easy-chat/apps/im/rpc/imclient"
+	"github.com/wujunhui99/easy-chat/apps/chat/rpc/chatclient"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
@@ -48,7 +48,7 @@ func (l *GroupPutInHandleLogic) GroupPutInHandle(req *types.GroupPutInHandleRep)
 		return nil, nil
 	}
 	// 创建进入群的用户和群的会话
-	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &imclient.SetUpUserConversationReq{
+	_, err = l.svcCtx.Chat.SetUpUserConversation(l.ctx, &chatclient.SetUpUserConversationReq{
 		SendId:   uid,
 		RecvId:   res.GroupId,
 		ChatType: int32(constants.GroupChatType),

@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"github.com/wujunhui99/easy-chat/apps/im/rpc/imclient"
+	"github.com/wujunhui99/easy-chat/apps/chat/rpc/chatclient"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/config"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/middleware"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
@@ -15,7 +15,7 @@ type ServiceContext struct {
 	Config config.Config
 	User   userclient.User
 	Social socialclient.Social
-	Im     imclient.Im
+	Chat   chatclient.Chat
 	*redis.Redis
 	JwtParse rest.Middleware
 }
@@ -25,7 +25,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:   c,
 		User:     userclient.NewUser(zrpc.MustNewClient(c.UserRpc)),
 		Social:   socialclient.NewSocial(zrpc.MustNewClient(c.SocialRpc)),
-		Im:       imclient.NewIm(zrpc.MustNewClient(c.ImRpc)),
+		Chat:     chatclient.NewChat(zrpc.MustNewClient(c.ChatRpc)),
 		Redis:    redis.MustNewRedis(c.JwtTable),
 		JwtParse: middleware.NewJwtParseMiddleware(c).Handle,
 	}

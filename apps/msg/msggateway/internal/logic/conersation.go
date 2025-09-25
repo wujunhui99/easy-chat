@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/wujunhui99/easy-chat/apps/im/immodels"
+	"github.com/wujunhui99/easy-chat/apps/chat/chatmodels"
 	"github.com/wujunhui99/easy-chat/apps/msg/msggateway/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/msg/msggateway/msggateway"
 	"github.com/wujunhui99/easy-chat/apps/msg/msggateway/websocket"
@@ -29,7 +29,7 @@ func (l *Conversation) Chat(data *msggateway.Chat, userId string) error {
 	if data.ConversationId == "" {
 		data.ConversationId = wuid.CombineId(userId, data.RecvId)
 	}
-	chatLog := immodels.ChatLog{
+	chatLog := chatmodels.ChatLog{
 		ConversationId: data.ConversationId,
 
 		SendId:     userId,

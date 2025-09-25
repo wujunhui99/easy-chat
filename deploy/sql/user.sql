@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS `users` (
     `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
--- goctl model mysql ddl -src="./deploy/sql/user.sql" -dir="./apps/user/models" -c
+-- goctl model mysql ddl -src="./deploy/sql/user.sql" -dir="./apps/user/models" -c -style gozero

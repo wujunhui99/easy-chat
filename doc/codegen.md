@@ -22,14 +22,14 @@ goctl -v
 goctl api format -dir apps/user/api
 
 # 生成（存在的文件会被保留；生成器会跳过已有业务逻辑文件）
-goctl api go -api apps/user/api/user.api -dir apps/user/api
+goctl api go -api apps/user/api/user.api -dir apps/user/api -style gozero
 ```
 其它服务（示例）：
 ```bash
-# IM API
-goctl api go -api apps/im/api/im.api -dir apps/im/api
+# Chat API
+goctl api go -api apps/chat/api/chat.api -dir apps/chat/api -style gozero
 # Social API
-goctl api go -api apps/social/api/social.api -dir apps/social/api
+goctl api go -api apps/social/api/social.api -dir apps/social/api -style gozero
 ```
 
 ### 修改路径命名的约定
@@ -41,12 +41,12 @@ goctl api go -api apps/social/api/social.api -dir apps/social/api
 ```bash
 cd apps/user/rpc
 # 生成 go、grpc、zrpc 服务端/客户端骨架
-goctl rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+goctl rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
 ```
 其它服务：
 ```bash
-cd apps/im/rpc && goctl rpc protoc im.proto --go_out=. --go-grpc_out=. --zrpc_out=.
-cd apps/social/rpc && goctl rpc protoc social.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+cd apps/chat/rpc && goctl rpc protoc chat.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
+cd apps/social/rpc && goctl rpc protoc social.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
 ```
 
 ### 注意事项
@@ -82,22 +82,22 @@ GOCTL_VERSION=1.8.3
 .PHONY: gen-user-api gen-user-rpc gen-im-api gen-im-rpc gen-social-api gen-social-rpc
 
 gen-user-api:
-	goctl api go -api apps/user/api/user.api -dir apps/user/api
+	goctl api go -api apps/user/api/user.api -dir apps/user/api -style gozero
 
 gen-user-rpc:
-	cd apps/user/rpc && goctl rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+	cd apps/user/rpc && goctl rpc protoc user.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
 
-gen-im-api:
-	goctl api go -api apps/im/api/im.api -dir apps/im/api
+gen-chat-api:
+	goctl api go -api apps/chat/api/chat.api -dir apps/chat/api -style gozero
 
-gen-im-rpc:
-	cd apps/im/rpc && goctl rpc protoc im.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+gen-chat-rpc:
+	cd apps/chat/rpc && goctl rpc protoc chat.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
 
 gen-social-api:
-	goctl api go -api apps/social/api/social.api -dir apps/social/api
+	goctl api go -api apps/social/api/social.api -dir apps/social/api -style gozero
 
 gen-social-rpc:
-	cd apps/social/rpc && goctl rpc protoc social.proto --go_out=. --go-grpc_out=. --zrpc_out=.
+	cd apps/social/rpc && goctl rpc protoc social.proto --go_out=. --go-grpc_out=. --zrpc_out=. -style gozero
 ```
 
 然后：

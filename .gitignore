@@ -2,3 +2,5 @@
 /components
 /vendor
 /web
+/logs
+logs/

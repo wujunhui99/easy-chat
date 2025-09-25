@@ -13,9 +13,9 @@ import (
 
 type ServiceContext struct {
 	Config config.Config
-	userclient.User
-	socialclient.Social
-	imclient.Im
+	User   userclient.User
+	Social socialclient.Social
+	Im     imclient.Im
 	*redis.Redis
 	JwtParse rest.Middleware
 }

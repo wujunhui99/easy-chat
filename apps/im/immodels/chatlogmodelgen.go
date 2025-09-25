@@ -30,11 +30,14 @@ func newDefaultChatLogModel(conn *mon.Model) *defaultChatLogModel {
 }
 
 func (m *defaultChatLogModel) Insert(ctx context.Context, data *ChatLog) error {
-	//if !data.ID.IsZero() {
-	//	data.ID = primitive.NewObjectID()
-	//	data.CreateAt = time.Now()
-	//	data.UpdateAt = time.Now()
-	//}
+	if data.ID.IsZero() {
+		data.ID = primitive.NewObjectID()
+	}
+	now := time.Now()
+	if data.CreateAt.IsZero() {
+		data.CreateAt = now
+	}
+	data.UpdateAt = now
 
 	_, err := m.conn.InsertOne(ctx, data)
 	return err
@@ -65,7 +68,6 @@ func (m *defaultChatLogModel) Update(ctx context.Context, data *ChatLog) error {
 	_, err := m.conn.ReplaceOne(ctx, bson.M{"_id": data.ID}, data)
 	return err
 }
-
 
 func (m *defaultChatLogModel) UpdateMarkRead(ctx context.Context, id primitive.ObjectID, readRecords []byte) error {
 	_, err := m.conn.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": bson.M{

@@ -19,6 +19,7 @@ const (
 	Identify    contextKey = "uid"
 	// TokenRaw 在 API 层 JWT 解析后放入上下文，供后续 Redis 二次校验中间件复用，避免重复解析 Authorization
 	TokenRaw contextKey = "tokenraw"
+	DeviceID contextKey = "deviceid"
 )
 
 func GetJwtToken(secretKey string, iat, seconds int64, uid string, deveicetype string, devicename string) (string, error) {
@@ -49,6 +50,12 @@ func WithUid(ctx context.Context, uid string) context.Context {
 func WithDeviceType(ctx context.Context, dev string) context.Context {
 	return context.WithValue(ctx, DeveiceType, dev)
 }
+func WithDeviceName(ctx context.Context, name string) context.Context {
+	return context.WithValue(ctx, DeveiceName, name)
+}
 func WithRawToken(ctx context.Context, token string) context.Context {
 	return context.WithValue(ctx, TokenRaw, token)
+}
+func WithDeviceId(ctx context.Context, deviceId string) context.Context {
+	return context.WithValue(ctx, DeviceID, deviceId)
 }

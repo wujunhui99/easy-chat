@@ -14,6 +14,8 @@ import (
 )
 
 type (
+	CreateAgentReq      = user.CreateAgentReq
+	CreateAgentResp     = user.CreateAgentResp
 	FindUserReq         = user.FindUserReq
 	FindUserResp        = user.FindUserResp
 	GetLoginDevicesReq  = user.GetLoginDevicesReq
@@ -36,6 +38,7 @@ type (
 		Ping(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
+		CreateAgent(ctx context.Context, in *CreateAgentReq, opts ...grpc.CallOption) (*CreateAgentResp, error)
 		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 		FindUser(ctx context.Context, in *FindUserReq, opts ...grpc.CallOption) (*FindUserResp, error)
 		Logout(ctx context.Context, in *LogoutReq, opts ...grpc.CallOption) (*LogoutResp, error)
@@ -67,6 +70,11 @@ func (m *defaultUser) Login(ctx context.Context, in *LoginReq, opts ...grpc.Call
 func (m *defaultUser) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
 	client := user.NewUserClient(m.cli.Conn())
 	return client.Register(ctx, in, opts...)
+}
+
+func (m *defaultUser) CreateAgent(ctx context.Context, in *CreateAgentReq, opts ...grpc.CallOption) (*CreateAgentResp, error) {
+	client := user.NewUserClient(m.cli.Conn())
+	return client.CreateAgent(ctx, in, opts...)
 }
 
 func (m *defaultUser) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {

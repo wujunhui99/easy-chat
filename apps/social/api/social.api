@@ -90,8 +90,9 @@ type (
 
 type (
 	FriendPutInHandleReq {
-		FriendReqId  int32 `json:"friend_req_id,omitempty"`
-		HandleResult int32 `json:"handle_result,omitempty"` // 处理结果
+		FriendReqId  int32  `json:"friend_req_id,omitempty"`
+		HandleResult int32  `json:"handle_result,omitempty"` // 处理结果
+		Remark       string `json:"remark,optional"`
 	}
 	FriendPutInHandleResp  {}
 )
@@ -101,7 +102,23 @@ type (
 		Direction int32 `json:"direction,optional"` // 1=收到的(别人加我 user_id=我) 2=我发出的(我加别人 req_uid=我) 默认1
 	}
 	FriendPutInListResp {
-		List []*FriendRequests `json:"list"`
+		List []*FriendRequestView `json:"list"`
+	}
+)
+
+type (
+	FriendRequestView {
+		Id           int64  `json:"id,omitempty"`
+		UserId       string `json:"user_id,omitempty"`
+		UserNickname string `json:"user_nickname,omitempty"`
+		UserAvatar   string `json:"user_avatar,omitempty"`
+		ReqUid       string `json:"req_uid,omitempty"`
+		ReqNickname  string `json:"req_nickname,omitempty"`
+		ReqAvatar    string `json:"req_avatar,omitempty"`
+		ReqMsg       string `json:"req_msg,omitempty"`
+		ReqTime      int64  `json:"req_time,omitempty"`
+		HandleResult int    `json:"handle_result,omitempty"`
+		HandleMsg    string `json:"handle_msg,omitempty"`
 	}
 )
 

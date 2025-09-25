@@ -72,6 +72,7 @@ message FriendPutInHandleReq {
   int32  friendReqId = 1;
   string userId = 2;
   int32 handleResult = 3; // 处理结果
+  string remark = 4; // 好友备注，由API层从user服务获取nickname填入
 }
 message FriendPutInHandleResp {}
 

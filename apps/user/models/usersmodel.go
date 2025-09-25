@@ -1,7 +1,12 @@
 package models
 
 import (
+	"context"
+	"fmt"
+	"strings"
+
 	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
 
@@ -12,6 +17,9 @@ type (
 	// and implement the added methods in customUsersModel.
 	UsersModel interface {
 		usersModel
+		FindByPhone(ctx context.Context, phone string) (*Users, error)
+		ListByName(ctx context.Context, name string) ([]*Users, error)
+		ListByIds(ctx context.Context, ids []string) ([]*Users, error)
 	}
 
 	customUsersModel struct {
@@ -31,3 +39,44 @@ func NewUsersModel(conn sqlx.SqlConn, c cache.CacheConf, opts ...cache.Option) U
 // 		defaultUsersModel: newUsersModel(conn, c),
 // 	}
 // }
+
+func (m *customUsersModel) FindByPhone(ctx context.Context, phone string) (*Users, error) {
+	var resp Users
+	query := fmt.Sprintf("select %s from %s where `phone` = ? limit 1", usersRows, m.table)
+	err := m.QueryRowNoCacheCtx(ctx, &resp, query, phone)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
+func (m *customUsersModel) ListByName(ctx context.Context, name string) ([]*Users, error) {
+	query := fmt.Sprintf("select %s from %s where `nickname` like ?", usersRows, m.table)
+	var resp []*Users
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, fmt.Sprint("%", name, "%"))
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return nil, err
+	}
+}
+
+func (m *customUsersModel) ListByIds(ctx context.Context, ids []string) ([]*Users, error) {
+	if len(ids) == 0 {
+		return nil, nil
+	}
+	query := fmt.Sprintf("select %s from %s where `id` in ('%s')", usersRows, m.table, strings.Join(ids, "','"))
+	var resp []*Users
+	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return nil, err
+	}
+}

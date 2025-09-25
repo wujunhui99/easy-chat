@@ -31,9 +31,6 @@ type (
 	usersModel interface {
 		Insert(ctx context.Context, data *Users) (sql.Result, error)
 		FindOne(ctx context.Context, id string) (*Users, error)
-		FindByPhone(ctx context.Context, phone string) (*Users, error)
-		ListByName(ctx context.Context, name string) ([]*Users, error)
-		ListByIds(ctx context.Context, ids []string) ([]*Users, error)
 		Update(ctx context.Context, data *Users) error
 		Delete(ctx context.Context, id string) error
 	}
@@ -50,6 +47,7 @@ type (
 		Phone     string         `db:"phone"`
 		Password  sql.NullString `db:"password"`
 		Status    sql.NullInt64  `db:"status"`
+		UserType  int64          `db:"user_type"` // 0 human, 1 agent
 		Sex       sql.NullInt64  `db:"sex"`
 		CreatedAt time.Time      `db:"created_at"`
 		UpdatedAt time.Time      `db:"updated_at"`
@@ -89,55 +87,11 @@ func (m *defaultUsersModel) FindOne(ctx context.Context, id string) (*Users, err
 	}
 }
 
-func (m *defaultUsersModel) FindByPhone(ctx context.Context, phone string) (*Users, error) {
-    var resp Users
-    // 使用 QueryRowNoCacheCtx 直接查询数据库,不使用缓存
-    err := m.QueryRowNoCacheCtx(ctx, &resp, 
-        fmt.Sprintf("select %s from %s where `phone` = ? limit 1", usersRows, m.table), 
-        phone)
-    
-    switch err {
-    case nil:
-        return &resp, nil
-    case sqlc.ErrNotFound:
-        return nil, ErrNotFound
-    default:
-        return nil, err
-    }
-}
-
-
-func (m *defaultUsersModel) ListByName(ctx context.Context, name string) ([]*Users, error) {
-	query := fmt.Sprintf("select %s from %s where `nickname` like ? ", usersRows, m.table)
-
-	var resp []*Users
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query, fmt.Sprint("%", name, "%"))
-	switch err {
-	case nil:
-		return resp, nil
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultUsersModel) ListByIds(ctx context.Context, ids []string) ([]*Users, error) {
-	query := fmt.Sprintf("select %s from %s where `id` in ('%s') ", usersRows, m.table, strings.Join(ids, "','"))
-
-	var resp []*Users
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query)
-	switch err {
-	case nil:
-		return resp, nil
-	default:
-		return nil, err
-	}
-}
-
 func (m *defaultUsersModel) Insert(ctx context.Context, data *Users) (sql.Result, error) {
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, usersRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.Id, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.Sex)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, usersRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.Id, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.UserType, data.Sex)
 	}, usersIdKey)
 	return ret, err
 }
@@ -146,7 +100,7 @@ func (m *defaultUsersModel) Update(ctx context.Context, data *Users) error {
 	usersIdKey := fmt.Sprintf("%s%v", cacheUsersIdPrefix, data.Id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, usersRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.Sex, data.Id)
+		return conn.ExecCtx(ctx, query, data.Avatar, data.Nickname, data.Phone, data.Password, data.Status, data.UserType, data.Sex, data.Id)
 	}, usersIdKey)
 	return err
 }

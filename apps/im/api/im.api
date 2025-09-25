@@ -32,7 +32,7 @@ type (
 
 type (
 	GetChatLogReadRecordsReq {
-		MsgId string `json:"msgId"`
+		MsgId string `json:"msgId" form:"msgId"`
 	}
 	GetChatLogReadRecordsResp {
 		Reads   []string `json:"reads"`
@@ -53,10 +53,10 @@ service im {
 // -------------- im api v1 --------------
 type (
 	ChatLogReq {
-		ConversationId string `json:"conversationId"`
-		StartSendTime  int64  `json:"startSendTime,omitempty"`
-		EndSendTime    int64  `json:"endSendTime,omitempty"`
-		Count          int64  `json:"count,omitempty"`
+		ConversationId string `json:"conversationId" form:"conversationId"`
+		StartSendTime  int64  `json:"startSendTime,omitempty" form:"startSendTime,optional"`
+		EndSendTime    int64  `json:"endSendTime,omitempty" form:"endSendTime,optional"`
+		Count          int64  `json:"count,omitempty" form:"count,optional"`
 	}
 	ChatLogResp {
 		List []*ChatLog `json:"list"`

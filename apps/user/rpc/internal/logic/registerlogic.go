@@ -56,6 +56,11 @@ func (l *RegisterLogic) Register(in *user.RegisterReq) (*user.RegisterResp, erro
 		Avatar:   in.Avatar,
 		Nickname: in.Nickname,
 		Phone:    in.Phone,
+		Status: sql.NullInt64{
+			Int64: constants.UserStatusNormal,
+			Valid: true,
+		},
+		UserType: constants.UserTypeHuman,
 		Sex: sql.NullInt64{
 			Int64: int64(in.Sex),
 			Valid: true,

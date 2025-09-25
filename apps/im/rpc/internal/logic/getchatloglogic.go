@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/wujunhui99/easy-chat/apps/im/rpc/im"
@@ -51,8 +52,23 @@ func (l *GetChatLogLogic) GetChatLog(in *im.GetChatLogReq) (*im.GetChatLogResp, 
 		}, nil
 	}
 
+	start := in.StartSendTime
+	if start <= 0 {
+		start = time.Now().Unix()
+	}
+
+	end := in.EndSendTime
+	if end >= start {
+		end = 0
+	}
+
+	count := in.Count
+	if count <= 0 {
+		count = 50
+	}
+
 	// 如果没有提供 msgId，基于时间范围查询聊天记录
-	data, err := l.svcCtx.ChatLogModel.ListBySendTime(l.ctx, in.ConversationId, in.StartSendTime, in.EndSendTime, in.Count)
+	data, err := l.svcCtx.ChatLogModel.ListBySendTime(l.ctx, in.ConversationId, start, end, count)
 	if err != nil {
 		// 如果查询过程中发生错误，返回包装后的错误信息
 		return nil, errors.Wrapf(xerr.NewDBErr(), "find chatLog list by SendTime failed, err: %v req: %v", err.Error(), in)

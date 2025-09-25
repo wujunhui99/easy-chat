@@ -18,8 +18,9 @@ type FriendListResp struct {
 }
 
 type FriendPutInHandleReq struct {
-	FriendReqId  int32 `json:"friend_req_id,omitempty"`
-	HandleResult int32 `json:"handle_result,omitempty"` // 处理结果
+	FriendReqId  int32  `json:"friend_req_id,omitempty"`
+	HandleResult int32  `json:"handle_result,omitempty"` // 处理结果
+	Remark       string `json:"remark,optional"`
 }
 
 type FriendPutInHandleResp struct {
@@ -30,7 +31,7 @@ type FriendPutInListReq struct {
 }
 
 type FriendPutInListResp struct {
-	List []*FriendRequests `json:"list"`
+	List []*FriendRequestView `json:"list"`
 }
 
 type FriendPutInReq struct {

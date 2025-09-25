@@ -42,5 +42,9 @@ func (l *DetailLogic) Detail(req *types.UserInfoReq) (resp *types.UserInfoResp, 
 	var res types.User
 	copier.Copy(&res, userInfoResp.User)
 
-	return &types.UserInfoResp{Info: res}, nil
+	return &types.UserInfoResp{
+		Info:       res,
+		DeviceType: ctxdata.GetDevicetype(l.ctx),
+		DeviceId:   ctxdata.GetDeviceId(l.ctx),
+	}, nil
 }

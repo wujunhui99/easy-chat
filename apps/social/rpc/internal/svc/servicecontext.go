@@ -3,6 +3,7 @@ package svc
 import (
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/config"
 	"github.com/wujunhui99/easy-chat/apps/social/socialmodels"
+	usermodels "github.com/wujunhui99/easy-chat/apps/user/models"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 )
@@ -14,6 +15,7 @@ type ServiceContext struct {
 	socialmodels.GroupsModel
 	socialmodels.GroupRequestsModel
 	socialmodels.GroupMembersModel
+	usermodels.UsersModel
 	*redis.Redis
 }
 
@@ -26,6 +28,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		GroupsModel:         socialmodels.NewGroupsModel(sqlConn, c.Cache),
 		GroupRequestsModel:  socialmodels.NewGroupRequestsModel(sqlConn, c.Cache),
 		GroupMembersModel:   socialmodels.NewGroupMembersModel(sqlConn, c.Cache),
+		UsersModel:          usermodels.NewUsersModel(sqlConn, c.Cache),
 		Redis:               redis.MustNewRedis(c.Redisx),
 	}
 }

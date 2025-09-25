@@ -20,3 +20,17 @@ func GetDevicetype(ctx context.Context) string {
 	}
 	return ""
 }
+
+func GetDeviceName(ctx context.Context) string {
+	if u, ok := ctx.Value(DeveiceName).(string); ok {
+		return u
+	}
+	return ""
+}
+
+func GetDeviceId(ctx context.Context) string {
+	if u, ok := ctx.Value(DeviceID).(string); ok {
+		return u
+	}
+	return ""
+}

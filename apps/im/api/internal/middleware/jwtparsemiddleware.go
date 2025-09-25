@@ -11,7 +11,13 @@ import (
 type JwtParseMiddleware struct{ tm *tokenmatch.TokenMatch }
 
 func NewJwtParseMiddleware(c config.Config) *JwtParseMiddleware {
-	return &JwtParseMiddleware{tm: tokenmatch.New(redis.MustNewRedis(c.JwtTable), tokenmatch.Config{})}
+	return &JwtParseMiddleware{tm: tokenmatch.New(
+		redis.MustNewRedis(c.JwtTable),
+		tokenmatch.Config{
+			AccessSecret:    c.JwtAuth.AccessSecret,
+			AllowEmptyToken: false,
+		},
+	)}
 }
 
 func (m *JwtParseMiddleware) Handle(next http.HandlerFunc) http.HandlerFunc { return m.tm.Handle(next) }

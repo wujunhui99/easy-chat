@@ -65,5 +65,7 @@ type UserInfoReq struct {
 }
 
 type UserInfoResp struct {
-	Info User `json:"info"`
+	Info       User   `json:"info"`
+	DeviceType string `json:"deviceType"`
+	DeviceId   string `json:"deviceId"`
 }

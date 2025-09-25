@@ -38,6 +38,11 @@ func (s *UserServer) Register(ctx context.Context, in *user.RegisterReq) (*user.
 	return l.Register(in)
 }
 
+func (s *UserServer) CreateAgent(ctx context.Context, in *user.CreateAgentReq) (*user.CreateAgentResp, error) {
+	l := logic.NewCreateAgentLogic(ctx, s.svcCtx)
+	return l.CreateAgent(in)
+}
+
 func (s *UserServer) GetUserInfo(ctx context.Context, in *user.GetUserInfoReq) (*user.GetUserInfoResp, error) {
 	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
 	return l.GetUserInfo(in)

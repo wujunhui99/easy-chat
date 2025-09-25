@@ -28,11 +28,14 @@ func newDefaultConversationsModel(conn *mon.Model) *defaultConversationsModel {
 }
 
 func (m *defaultConversationsModel) Insert(ctx context.Context, data *Conversations) error {
-	if !data.ID.IsZero() {
+	if data.ID.IsZero() {
 		data.ID = primitive.NewObjectID()
-		data.CreateAt = time.Now()
-		data.UpdateAt = time.Now()
 	}
+	now := time.Now()
+	if data.CreateAt.IsZero() {
+		data.CreateAt = now
+	}
+	data.UpdateAt = now
 
 	_, err := m.conn.InsertOne(ctx, data)
 	return err

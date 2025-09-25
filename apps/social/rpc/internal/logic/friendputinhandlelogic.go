@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"database/sql"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/internal/svc"
@@ -64,21 +66,63 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(in *social.FriendPutInHandleR
 		dirs := []pair{{firendReq.UserId, firendReq.ReqUid}, {firendReq.ReqUid, firendReq.UserId}}
 		var toInsert []*socialmodels.Friends
 
+		nickCache := make(map[string]string)
+		lookupNickname := func(id string) string {
+			if v, ok := nickCache[id]; ok {
+				return v
+			}
+			info, err := l.svcCtx.UsersModel.FindOne(ctx, id)
+			if err != nil {
+				l.Logger.Errorf("find nickname failed id=%s err=%v", id, err)
+				return ""
+			}
+			nickCache[id] = info.Nickname
+			return info.Nickname
+		}
+
+		buildRemark := func(holderId, friendId string) sql.NullString {
+			remarkText := ""
+			if holderId == firendReq.UserId {
+				remarkText = strings.TrimSpace(in.Remark)
+			}
+			if remarkText == "" {
+				remarkText = lookupNickname(friendId)
+			}
+			if remarkText == "" {
+				return sql.NullString{}
+			}
+			return sql.NullString{String: remarkText, Valid: true}
+		}
+
 		for _, d := range dirs {
-			// 查是否已有方向
+			remarkValue := buildRemark(d.U, d.F)
+
 			row, ferr := l.svcCtx.FriendsModel.FindOneByUserIdFriendUid(ctx, d.U, d.F)
 			if ferr != nil {
-				if ferr == socialmodels.ErrNotFound { // 插入
-					toInsert = append(toInsert, &socialmodels.Friends{UserId: d.U, FriendUid: d.F, Status: 0})
+				if ferr == socialmodels.ErrNotFound { // 新建方向
+					toInsert = append(toInsert, &socialmodels.Friends{
+						UserId:    d.U,
+						FriendUid: d.F,
+						Remark:    remarkValue,
+						Status:    0,
+					})
 					continue
 				}
 				return errors.Wrapf(xerr.NewDBErr(), "find friend %s->%s err %v", d.U, d.F, ferr)
 			}
-			// 已存在但 status!=0 (删除/拉黑/免打扰) -> 恢复为正常(是否覆盖拉黑按业务策略，这里统一恢复除非想保留拉黑需判断)
+
 			if row.Status != 0 {
 				row.Status = 0
+				if remarkValue.Valid {
+					row.Remark = remarkValue
+				}
 				if err := l.svcCtx.FriendsModel.Update(ctx, row); err != nil {
 					return errors.Wrapf(xerr.NewDBErr(), "restore friend %s->%s err %v", d.U, d.F, err)
+				}
+			} else if remarkValue.Valid && (!row.Remark.Valid || row.Remark.String == "") {
+				row.Remark = remarkValue
+				if err := l.svcCtx.FriendsModel.Update(ctx, row); err != nil {
+					return errors.Wrapf(xerr.NewDBErr(), "update friend remark %s->%s err %v", d.U, d.F, err)
 				}
 			}
 		}

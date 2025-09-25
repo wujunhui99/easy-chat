@@ -3,6 +3,20 @@
 
 package types
 
+type FriendRequestView struct {
+	Id           int64  `json:"id,omitempty"`
+	UserId       string `json:"user_id,omitempty"`
+	UserNickname string `json:"user_nickname,omitempty"`
+	UserAvatar   string `json:"user_avatar,omitempty"`
+	ReqUid       string `json:"req_uid,omitempty"`
+	ReqNickname  string `json:"req_nickname,omitempty"`
+	ReqAvatar    string `json:"req_avatar,omitempty"`
+	ReqMsg       string `json:"req_msg,omitempty"`
+	ReqTime      int64  `json:"req_time,omitempty"`
+	HandleResult int    `json:"handle_result,omitempty"`
+	HandleMsg    string `json:"handle_msg,omitempty"`
+}
+
 type FriendRequests struct {
 	Id           int64  `json:"id,omitempty"`
 	UserId       string `json:"user_id,omitempty"`

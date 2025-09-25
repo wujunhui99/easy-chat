@@ -46,6 +46,8 @@ type (
 	UserInfoReq  {}
 	UserInfoResp {
 		Info User `json:"info"`
+		DeviceType string `json:"deviceType"`
+		DeviceId   string `json:"deviceId"`
 	}
 )
 
@@ -66,4 +68,3 @@ type UserFindReq {
 type UserFindResp {
 	user *User `json:"user,omitempty"`
 }
-

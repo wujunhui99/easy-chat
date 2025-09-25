@@ -3,6 +3,7 @@ package friend
 import (
 	"context"
 
+	"github.com/jinzhu/copier"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/svc"
 	"github.com/wujunhui99/easy-chat/apps/social/api/internal/types"
 	"github.com/wujunhui99/easy-chat/apps/social/rpc/socialclient"
@@ -26,54 +27,52 @@ func NewFriendListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Friend
 }
 
 func (l *FriendListLogic) FriendList(req *types.FriendListReq) (resp *types.FriendListResp, err error) {
-	// todo: add your logic here and delete this line
-
 	uid := ctxdata.GetUid(l.ctx)
 
-	friends, err := l.svcCtx.Social.FriendList(l.ctx, &socialclient.FriendListReq{
-		UserId: uid,
-	})
+	list, err := l.svcCtx.Social.FriendList(l.ctx, &socialclient.FriendListReq{UserId: uid})
 	if err != nil {
 		return nil, err
 	}
 
-	if len(friends.List) == 0 {
-		return &types.FriendListResp{}, nil
+	if len(list.List) == 0 {
+		return &types.FriendListResp{List: nil}, nil
 	}
 
-	// 根据好友id获取好友信息
-	uids := make([]string, 0, len(friends.List))
-	for _, i := range friends.List {
-		uids = append(uids, i.FriendUid)
-	}
-
-	// 根据uids查询用户信息
-	users, err := l.svcCtx.User.FindUser(l.ctx, &userclient.FindUserReq{
-		Ids: uids,
-	})
-	if err != nil {
-		return &types.FriendListResp{}, nil
-	}
-	userRecords := make(map[string]*userclient.UserEntity, len(users.User))
-	for i, _ := range users.User {
-		userRecords[users.User[i].Id] = users.User[i]
-	}
-
-	respList := make([]*types.Friends, 0, len(friends.List))
-	for _, v := range friends.List {
-		friend := &types.Friends{
-			Id:        v.Id,
-			FriendUid: v.FriendUid,
+	ids := make([]string, 0, len(list.List))
+	seen := make(map[string]struct{}, len(list.List))
+	for _, item := range list.List {
+		if item.FriendUid != "" {
+			if _, ok := seen[item.FriendUid]; !ok {
+				seen[item.FriendUid] = struct{}{}
+				ids = append(ids, item.FriendUid)
+			}
 		}
+	}
 
-		if u, ok := userRecords[v.FriendUid]; ok {
-			friend.Nickname = u.Nickname
-			friend.Avatar = u.Avatar
+	infoMap := make(map[string]*userclient.UserEntity, len(ids))
+	if len(ids) > 0 {
+		if userResp, err := l.svcCtx.User.FindUser(l.ctx, &userclient.FindUserReq{Ids: ids}); err != nil {
+			l.Logger.Errorf("find user info failed for ids %v: %v", ids, err)
+		} else if userResp != nil {
+			for _, info := range userResp.User {
+				if info == nil {
+					continue
+				}
+				infoMap[info.Id] = info
+			}
+		}
+	}
+
+	respList := make([]*types.Friends, 0, len(list.List))
+	for _, item := range list.List {
+		friend := new(types.Friends)
+		copier.Copy(friend, item)
+		if info, ok := infoMap[item.FriendUid]; ok && info != nil {
+			friend.Nickname = info.Nickname
+			friend.Avatar = info.Avatar
 		}
 		respList = append(respList, friend)
 	}
 
-	return &types.FriendListResp{
-		List: respList,
-	}, nil
+	return &types.FriendListResp{List: respList}, nil
 }
